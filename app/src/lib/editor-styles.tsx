@@ -19,7 +19,8 @@ export const styleMap = {
     },
     huggingface_local: {
       transition: "background-color 0.2s ease-in-out",
-      backgroundColor: "#f6b2b3",
+      backgroundColor: "#31203E",
+      color:"#B5F7D9",
       padding: "2px 0",
     },
     cohere: {
@@ -29,7 +30,8 @@ export const styleMap = {
     },
     huggingface: {
       transition: "background-color 0.2s ease-in-out",
-      backgroundColor: "#D7BCE8",
+      backgroundColor: "#31203E",
+      color:"#B5F7D9",
       padding: "2px 0",
     },
     forefront: {
