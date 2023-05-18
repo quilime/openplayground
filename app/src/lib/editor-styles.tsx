@@ -9,11 +9,12 @@ export const styleMap = {
       fontWeight: "bold",
     },
   };
-  
+
   export const styles = {
     openai: {
       transition: "background-color 0.2s ease-in-out",
-      backgroundColor: "#b9eebc",
+      backgroundColor: "#1C2B44",
+      color:"#FCFFB6",
       padding: "2px 0",
     },
     huggingface_local: {
@@ -49,7 +50,7 @@ export const styleMap = {
       padding: "2px 0",
     },
   };
-  
+
   export function getDecoratedStyle(provider: string, showHighlights: boolean) {
     if (showHighlights === false) return styles.default;
     switch (provider) {
@@ -67,9 +68,8 @@ export const styleMap = {
         return styles.anthropic;
       case "aleph-alpha":
         return styles.aleph_alpha;
-  
+
       default:
         return styles.default;
     }
   }
-  

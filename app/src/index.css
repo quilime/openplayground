@@ -6,6 +6,15 @@ html, body, #app {
   height: 100%;
   max-height: 100%;
   font-family: "Quicksand", sans-serif;
+  @apply dark:bg-zinc-900 dark:text-slate-300 ;
+}
+
+.border {
+  @apply dark:border-slate-800;
+}
+
+a {
+  @apply dark:hover:text-slate-400;
 }
 
 /* fixes overflowing on certain devices */
@@ -23,20 +32,20 @@ html, body, #app {
   border: none;
   border-radius: 1px;
   box-shadow: none;
-  background-image: 
-    linear-gradient(#334155, #334155), 
-    linear-gradient(#334155, #334155), 
-    linear-gradient(#334155, #334155), 
-    linear-gradient(#334155, #334155), 
-    
-    linear-gradient(rgba(226 232 240), rgba(226 232 240)), 
-    linear-gradient(rgba(226 232 240), rgba(226 232 240)), 
-    linear-gradient(rgba(226 232 240), rgba(226 232 240)), 
+  background-image:
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
+
+    linear-gradient(rgba(226 232 240), rgba(226 232 240)),
+    linear-gradient(rgba(226 232 240), rgba(226 232 240)),
+    linear-gradient(rgba(226 232 240), rgba(226 232 240)),
     linear-gradient(rgba(226 232 240), rgba(226 232 240));
-  
-  background-position: 0 0, 0 0, 0 100%, 0 100%, 
+
+  background-position: 0 0, 0 0, 0 100%, 0 100%,
                        0 0, 0 0, 0 100%, 100% 0;
-  background-size: 1px 0%, 0% 1px, 0% 1px, 1px 0%,  
+  background-size: 1px 0%, 0% 1px, 0% 1px, 1px 0%,
                    1px 100%, 100% 1px, 100% 1px,1px 100%;
   background-color:transparent;
   background-repeat:no-repeat;
@@ -48,80 +57,80 @@ html, body, #app {
 }
 
 .border_inference_pending {
-  background-image: 
-    linear-gradient(#8d8e8f, #8d8e8f), 
-    linear-gradient(#8d8e8f, #8d8e8f), 
-    linear-gradient(#8d8e8f, #8d8e8f), 
-    linear-gradient(#8d8e8f, #8d8e8f), 
+  background-image:
+    linear-gradient(#8d8e8f, #8d8e8f),
+    linear-gradient(#8d8e8f, #8d8e8f),
+    linear-gradient(#8d8e8f, #8d8e8f),
+    linear-gradient(#8d8e8f, #8d8e8f),
 
-    linear-gradient(rgba(226 232 240), rgba(226 232 240)), 
-    linear-gradient(rgba(226 232 240), rgba(226 232 240)), 
-    linear-gradient(rgba(226 232 240), rgba(226 232 240)), 
+    linear-gradient(rgba(226 232 240), rgba(226 232 240)),
+    linear-gradient(rgba(226 232 240), rgba(226 232 240)),
+    linear-gradient(rgba(226 232 240), rgba(226 232 240)),
     linear-gradient(rgba(226 232 240), rgba(226 232 240));
 }
 
 .border_inference_complete {
-  background-image: 
-    linear-gradient(#334155, #334155), 
-    linear-gradient(#334155, #334155), 
-    linear-gradient(#334155, #334155), 
-    linear-gradient(#334155, #334155), 
-    
-    linear-gradient(#334155, #334155), 
-    linear-gradient(#334155, #334155), 
-    linear-gradient(#334155, #334155), 
+  background-image:
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
+
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
     linear-gradient(#334155, #334155);
 }
 
 .border_inference_error {
-  background-image: 
-    linear-gradient(#f56760, #f56760), 
-    linear-gradient(#f56760, #f56760), 
-    linear-gradient(#f56760, #f56760), 
-    linear-gradient(#f56760, #f56760), 
-    
-    linear-gradient(#f56760, #f56760), 
-    linear-gradient(#f56760, #f56760), 
-    linear-gradient(#f56760, #f56760), 
+  background-image:
+    linear-gradient(#f56760, #f56760),
+    linear-gradient(#f56760, #f56760),
+    linear-gradient(#f56760, #f56760),
+    linear-gradient(#f56760, #f56760),
+
+    linear-gradient(#f56760, #f56760),
+    linear-gradient(#f56760, #f56760),
+    linear-gradient(#f56760, #f56760),
     linear-gradient(#f56760, #f56760);
 }
 
 @keyframes animate {
   0% {
-  background-position: 0 100%, 0 0, 0 100%, 100% 0, 
+  background-position: 0 100%, 0 0, 0 100%, 100% 0,
                        0 0, 0 0, 0 100%, 100% 0;
-  background-size: 1px 0%, 100% 1px, 0% 1px,1px 0%,  
+  background-size: 1px 0%, 100% 1px, 0% 1px,1px 0%,
                    1px 100%, 100% 1px, 100% 1px,1px 100%;
   }
   40% {
-  background-position: 0 100%, 100% 0, 100% 100%, 100% 0, 
+  background-position: 0 100%, 100% 0, 100% 100%, 100% 0,
                        0 0, 0 0, 0 100%, 100% 0;
-  background-size: 1px 0%, 100% 1px, 0% 1px,1px 100%,  
+  background-size: 1px 0%, 100% 1px, 0% 1px,1px 100%,
                    1px 100%, 100% 1px, 100% 1px,1px 100%;
   }
   60% {
-  background-position: 0 100%, 100% 0, 100% 100%, 100% 100%, 
+  background-position: 0 100%, 100% 0, 100% 100%, 100% 100%,
                        0 0, 0 0, 0 100%, 100% 0;
-  background-size: 1px 0%, 0% 1px, 100% 1px,1px 100%,  
+  background-size: 1px 0%, 0% 1px, 100% 1px,1px 100%,
                    1px 100%, 100% 1px, 100% 1px,1px 100%;
   }
   70% {
-  background-position: 0 100%, 100% 0, 0% 100%, 100% 100%, 
+  background-position: 0 100%, 100% 0, 0% 100%, 100% 100%,
                        0 0, 0 0, 0 100%, 100% 0;
-  background-size: 1px 100%, 0% 1px, 100% 1px,1px 0%,  
+  background-size: 1px 100%, 0% 1px, 100% 1px,1px 0%,
                    1px 100%, 100% 1px, 100% 1px,1px 100%;
   }
   80% {
-  background-position: 0% 0%, 0% 0, 0% 100%, 100% 100%, 
+  background-position: 0% 0%, 0% 0, 0% 100%, 100% 100%,
                        0 0, 0 0, 0 100%, 100% 0;
-  background-size: 1px 100%, 0% 1px, 0% 1px,1px 0%,  
+  background-size: 1px 100%, 0% 1px, 0% 1px,1px 0%,
                    1px 100%, 100% 1px, 100% 1px,1px 100%;
   }
   100% {
-  background-position: 0% 0%, 0 0, 0 100%, 100% 100%, 
+  background-position: 0% 0%, 0 0, 0 100%, 100% 100%,
                        0 0, 0 0, 0 100%, 100% 0;
-  background-size: 1px 0%, 100% 1px, 0% 1px,1px 0%,  
-                   1px 100%, 100% 1px, 100% 1px,1px 100%;  
+  background-size: 1px 0%, 100% 1px, 0% 1px,1px 0%,
+                   1px 100%, 100% 1px, 100% 1px,1px 100%;
   }
 }
 
