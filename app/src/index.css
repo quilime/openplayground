@@ -25,6 +25,7 @@ a {
 .DraftEditor-root {
   flex: 1 1 0;
   overflow: auto;
+  font-family: monospace;
 }
 .loading_border {
   padding: 11px;
