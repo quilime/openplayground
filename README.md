@@ -35,8 +35,17 @@ This runs a Flask process, so you can add the typical flags such as setting a di
 
 ```sh
 git clone https://github.com/nat/openplayground
-cd app && npm install && npx parcel watch src/index.html --no-cache
-cd server && pip3 install -r requirements.txt && cd .. && python3 -m server.app
+
+# in one terminal run the frontend
+cd app
+npm install
+npx parcel watch src/index.html --no-cache
+
+# in another terminal
+cd server
+pip3 install -r requirements.txt
+cd ..
+python3 -m server.app
 ```
 
 ## Docker
