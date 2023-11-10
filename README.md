@@ -31,16 +31,13 @@ make clean
 
 ## Ideas for contributions
 
-- Add a token counter to the playground
-- Add a cost counter to the playground and the compare page
+- Add a token counter
+- Add a cost counter compare page
 - Measure and display time to first token
-- Setup automatic builds with GitHub Actions
-- The default parameters for each model are configured in the `server/models.json` file. If you find better default parameters for a model, please submit a pull request!
-- Someone can help us make a homebrew package, and a dockerfile
-- Easier way to install open source models directly from openplayground, with `openplayground install <model>` or in the UI.
-- Find and fix bugs
-- ChatGPT UI, with turn-by-turn, markdown rendering, chatgpt plugin support, etc.
-- We will probably need multimodal inputs and outputs at some point in 2023
+- The default parameters for each model are configured in the `server/models.json` file. 
+- If you find better default parameters for a model, please submit a PR
+- Markdown rendering
+- Chatgpt plugin support
 
 ### llama.cpp
 
