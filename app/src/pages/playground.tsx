@@ -253,22 +253,11 @@ class EditorWrapper extends React.Component {
     if (event.code === "Enter" && event.metaKey) {
       return "ignore_enter"
     }
-
-    if (event.metaKey && event.keyCode === 66) {
-      return "bold"
-    } else if (event.ctrlKey && event.keyCode === 66) {
-      return "bold"
-    }
     return getDefaultKeyBinding(event)
   }
 
   handleKeyCommand(command: any, editorState: any) {
     const {setEditorState} = this.props
-
-    if (command === "bold") {
-      setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"))
-      return "handled"
-    }
     if (command === "ignore_enter") {
       return "handled"
     }
@@ -281,7 +270,7 @@ class EditorWrapper extends React.Component {
       <Editor
         keyBindingFn={this.keyBindingFn.bind(this)}
         handleKeyCommand={this.handleKeyCommand.bind(this)}
-        customStyleMap={styleMap}
+        // customStyleMap={styleMap}
         editorState={editorState}
         onChange={(editorState: any) => {
           setEditorState(editorState)
@@ -388,8 +377,12 @@ const PromptCompletionEditor = ({showDialog}) => {
         break;
 
         case "status":
-          const {message} = data
-          if (message.indexOf("[ERROR] ") === 0) {
+          const { message, modelProvider } = data
+
+          // weird case for cohere
+          const skipCohereError = modelProvider === 'cohere' && message === "[ERROR] 'text'";
+
+          if (!skipCohereError && message.indexOf("[ERROR] ") === 0) {
             showDialog({
               title: "Model Error",
               message: message.replace("[ERROR] ", ""),

@@ -232,12 +232,12 @@ const ProviderView = (props: ProviderProps) => {
   const {provider} = props
 
   return (
-    <div className="overflow-hidden flex col-span-6 lg:col-span-3 flex flex-row mx-2 lg:mx-0">
+    <div className="flex col-span-6 lg:col-span-3 flex flex-row mx-2 lg:mx-0">
       <div>
         <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight">
           {provider} Setup
         </h1>
-        <div className="max-h-[100%] flex-1 overflow-auto mt-2">
+        <div className="flex-1 mt-2">
           <ProviderCredentials {...props}/>
           <ProviderModelSelection {...props}/>
           <ProviderSearchModels {...props}/>
@@ -290,7 +290,7 @@ const AllSelectedModels = ({enabledModels, toggleModel}: AllSelectedModelsProps)
         <div className="mt-1">
           <p>These models will be available in the menu dropdown</p>
         </div>
-        <div className="max-h-[100%] overflow-hidden">
+        <div className="">
           <div>
             {selectedModelsCard()}
           </div>
@@ -468,10 +468,10 @@ export default function Settings() {
     )
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col pb-10">
       <NavBar tab="settings" />
-      <div className="flex flex-1 flex-col font-display flex-grow overflow-hidden">
-        <div className="max-h-[100%] lg:flex-grow grid gap-6 grid-cols-6 mx-1 lg:mx-5 flex flex-row">
+      <div className="flex flex-1 flex-col font-display flex-grow">
+        <div className="lg:flex-grow grid gap-6 grid-cols-6 mx-1 lg:mx-5 flex flex-row">
           <div className="flex col-span-6 lg:flex-col lg:col-span-1">
             <h1 className="scroll-m-20 text-3xl mb-5 font-extrabold tracking-tight hidden lg:inline-block">
               Providers

@@ -387,18 +387,7 @@ const ModelCard = forwardRef((props, ref) => {
   }
 
   return (
-    <div className={`flex flex-col items-center text-gray-600 text-lg font-bold h-96`}
-      style = {model.selected? {
-        transition: "all 0.3s ease",
-        backgroundColor: "#f5f5f5",
-        borderRadius: 4,
-        padding: 6
-      } : {
-        transition: "all 0.3s ease",
-        backgroundColor: "#ffffff",
-        borderRadius: 0,
-        padding: 0
-      } }>
+    <div className={`flex flex-col items-center text-gray-600 text-lg font-bold h-96`}>
       <div className="flex justify  max-w-[100%]">
         <h2
           onClick={(event) => {
@@ -412,7 +401,7 @@ const ModelCard = forwardRef((props, ref) => {
             )
           }}
           className={
-            `select-none cursor-pointer text-ellipsis overflow-hidden max-w-full whitespace-nowrap overflow-hidden ${model.selected ? "font-medium" : "font-normal"}`
+            `select-none cursor-pointer text-ellipsis max-w-full whitespace-nowrap overflow-hidden ${model.selected ? "font-medium" : "font-normal"}`
           }>
             {model.name}
         </h2>
