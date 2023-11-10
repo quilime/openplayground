@@ -13,4 +13,5 @@ frontend:
 	cd app && npx parcel watch src/index.html --no-cache 
 
 backend:
-	python3 -m server.app
+	python3 -m server.app --port 5555
+	

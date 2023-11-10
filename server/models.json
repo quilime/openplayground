@@ -6,44 +6,27 @@
       "text-ada-001": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 0.5,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              2048
-            ]
+            "range": [50, 2048]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "presencePenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "frequencyPenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "stopSequences": {
             "value": [],
@@ -54,44 +37,27 @@
       "text-babbage-001": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 0.5,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              2048
-            ]
+            "range": [50, 2048]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "presencePenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "frequencyPenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "stopSequences": {
             "value": [],
@@ -102,44 +68,27 @@
       "text-curie-001": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 0.5,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              2048
-            ]
+            "range": [50, 2048]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "presencePenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "frequencyPenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "stopSequences": {
             "value": [],
@@ -150,44 +99,27 @@
       "text-davinci-003": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 0.5,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              4000
-            ]
+            "range": [50, 4000]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "presencePenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "frequencyPenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "stopSequences": {
             "value": [],
@@ -198,44 +130,89 @@
       "gpt-3.5-turbo": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 0.5,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              4097
-            ]
+            "range": [50, 4097]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "presencePenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "frequencyPenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
+          },
+          "stopSequences": {
+            "value": [],
+            "range": []
+          }
+        }
+      },
+      "gpt-3.5-turbo-16k": {
+        "enabled": false,
+        "status": "ready",
+        "capabilities": ["logprobs"],
+        "parameters": {
+          "temperature": {
+            "value": 0.5,
+            "range": [0.1, 1]
+          },
+          "maximumLength": {
+            "value": 200,
+            "range": [50, 16384]
+          },
+          "topP": {
+            "value": 1,
+            "range": [0.1, 1]
+          },
+          "presencePenalty": {
+            "value": 0,
+            "range": [0, 1]
+          },
+          "frequencyPenalty": {
+            "value": 0,
+            "range": [0, 1]
+          },
+          "stopSequences": {
+            "value": [],
+            "range": []
+          }
+        }
+      },
+      "gpt-3.5-turbo-1106": {
+        "enabled": false,
+        "status": "ready",
+        "capabilities": ["logprobs"],
+        "parameters": {
+          "temperature": {
+            "value": 0.5,
+            "range": [0.1, 1]
+          },
+          "maximumLength": {
+            "value": 200,
+            "range": [50, 16384]
+          },
+          "topP": {
+            "value": 1,
+            "range": [0.1, 1]
+          },
+          "presencePenalty": {
+            "value": 0,
+            "range": [0, 1]
+          },
+          "frequencyPenalty": {
+            "value": 0,
+            "range": [0, 1]
           },
           "stopSequences": {
             "value": [],
@@ -246,44 +223,58 @@
       "gpt-4": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 0.5,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              8192
-            ]
+            "range": [50, 8192]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "presencePenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "frequencyPenalty": {
             "value": 0,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
+          },
+          "stopSequences": {
+            "value": [],
+            "range": []
+          }
+        }
+      },
+      "gpt-4-1106-preview": {
+        "enabled": false,
+        "status": "ready",
+        "capabilities": ["logprobs"],
+        "parameters": {
+          "temperature": {
+            "value": 0.5,
+            "range": [0.1, 1]
+          },
+          "maximumLength": {
+            "value": 200,
+            "range": [50, 128000]
+          },
+          "topP": {
+            "value": 1,
+            "range": [0.1, 1]
+          },
+          "presencePenalty": {
+            "value": 0,
+            "range": [0, 1]
+          },
+          "frequencyPenalty": {
+            "value": 0,
+            "range": [0, 1]
           },
           "stopSequences": {
             "value": [],
@@ -304,45 +295,27 @@
         "parameters": {
           "temperature": {
             "value": 1,
-            "range": [
-              0.1,
-              2
-            ]
+            "range": [0.1, 2]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              4096
-            ]
+            "range": [50, 4096]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "topK": {
             "value": 0,
-            "range": [
-              0,
-              500
-            ]
+            "range": [0, 500]
           },
           "presencePenalty": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "frequencyPenalty": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "stopSequences": {
             "value": [],
@@ -357,45 +330,27 @@
         "parameters": {
           "temperature": {
             "value": 1,
-            "range": [
-              0.1,
-              2
-            ]
+            "range": [0.1, 2]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              4096
-            ]
+            "range": [50, 4096]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "topK": {
             "value": 0,
-            "range": [
-              0,
-              500
-            ]
+            "range": [0, 500]
           },
           "presencePenalty": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "frequencyPenalty": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "stopSequences": {
             "value": [],
@@ -413,38 +368,23 @@
     "defaultParameters": {
       "temperature": {
         "value": 1,
-        "range": [
-          0.1,
-          1
-        ]
+        "range": [0.1, 1]
       },
       "maximumLength": {
         "value": 200,
-        "range": [
-          50,
-          1024
-        ]
+        "range": [50, 1024]
       },
       "topP": {
         "value": 0.99,
-        "range": [
-          0.01,
-          0.99
-        ]
+        "range": [0.01, 0.99]
       },
       "topK": {
         "value": 1,
-        "range": [
-          1,
-          500
-        ]
+        "range": [1, 500]
       },
       "repetitionPenalty": {
         "value": 1,
-        "range": [
-          0.1,
-          2
-        ]
+        "range": [0.1, 2]
       },
       "stopSequences": {
         "value": [],
@@ -461,38 +401,23 @@
     "defaultParameters": {
       "temperature": {
         "value": 1,
-        "range": [
-          0.1,
-          1
-        ]
+        "range": [0.1, 1]
       },
       "maximumLength": {
         "value": 200,
-        "range": [
-          50,
-          1024
-        ]
+        "range": [50, 1024]
       },
       "topP": {
         "value": 0.99,
-        "range": [
-          0.1,
-          0.99
-        ]
+        "range": [0.1, 0.99]
       },
       "topK": {
         "value": 1,
-        "range": [
-          1,
-          500
-        ]
+        "range": [1, 500]
       },
       "repetitionPenalty": {
         "value": 1,
-        "range": [
-          0.1,
-          2
-        ]
+        "range": [0.1, 2]
       }
     },
     "models": {}
@@ -508,24 +433,15 @@
         "parameters": {
           "temperature": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "maximumLength": {
             "value": 205,
-            "range": [
-              50,
-              9216
-            ]
+            "range": [50, 9216]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "stopSequences": {
             "value": [],
@@ -540,24 +456,15 @@
         "parameters": {
           "temperature": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              9216
-            ]
+            "range": [50, 9216]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "stopSequences": {
             "value": [],
@@ -574,44 +481,27 @@
       "luminous-supreme-control": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              1024
-            ]
+            "range": [50, 1024]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "topK": {
             "value": 1,
-            "range": [
-              1,
-              500
-            ]
+            "range": [1, 500]
           },
           "repetitionPenalty": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "stopSequences": {
             "value": [],
@@ -622,44 +512,27 @@
       "luminous-base": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              1024
-            ]
+            "range": [50, 1024]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "topK": {
             "value": 1,
-            "range": [
-              1,
-              500
-            ]
+            "range": [1, 500]
           },
           "repetitionPenalty": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "stopSequences": {
             "value": [],
@@ -670,44 +543,27 @@
       "luminous-supreme": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              1024
-            ]
+            "range": [50, 1024]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "topK": {
             "value": 1,
-            "range": [
-              1,
-              500
-            ]
+            "range": [1, 500]
           },
           "repetitionPenalty": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "stopSequences": {
             "value": [],
@@ -718,44 +574,27 @@
       "luminous-extended": {
         "enabled": false,
         "status": "ready",
-        "capabilities": [
-          "logprobs"
-        ],
+        "capabilities": ["logprobs"],
         "parameters": {
           "temperature": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "maximumLength": {
             "value": 200,
-            "range": [
-              50,
-              1024
-            ]
+            "range": [50, 1024]
           },
           "topP": {
             "value": 1,
-            "range": [
-              0,
-              1
-            ]
+            "range": [0, 1]
           },
           "topK": {
             "value": 1,
-            "range": [
-              1,
-              500
-            ]
+            "range": [1, 500]
           },
           "repetitionPenalty": {
             "value": 1,
-            "range": [
-              0.1,
-              1
-            ]
+            "range": [0.1, 1]
           },
           "stopSequences": {
             "value": [],
@@ -773,38 +612,23 @@
     "defaultParameters": {
       "temperature": {
         "value": 1,
-        "range": [
-          0.1,
-          1
-        ]
+        "range": [0.1, 1]
       },
       "maximumLength": {
         "value": 200,
-        "range": [
-          50,
-          1024
-        ]
+        "range": [50, 1024]
       },
       "topP": {
         "value": 1,
-        "range": [
-          0.1,
-          1
-        ]
+        "range": [0.1, 1]
       },
       "topK": {
         "value": 1,
-        "range": [
-          1,
-          500
-        ]
+        "range": [1, 500]
       },
       "repetitionPenalty": {
         "value": 1,
-        "range": [
-          0.1,
-          2
-        ]
+        "range": [0.1, 2]
       }
     },
     "models": {}

@@ -325,8 +325,17 @@ class InferenceManager:
                 logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
 
     def openai_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
+        
         # TODO: Add a meta field to the inference so we know when a model is chat vs text
-        if inference_request.model_name in ["gpt-3.5-turbo", "gpt-4"]:
+        chat_models = [
+            "gpt-3.5-turbo",
+            "gpt-3.5-turbo-16k",
+            "gpt-3.5-turbo-1106",
+            "gpt-4",
+            "gpt-4-1106-preview",
+        ]
+
+        if inference_request.model_name in chat_models:
             self.__error_handler__(self.__openai_chat_generation__, provider_details, inference_request)
         else:
             self.__error_handler__(self.__openai_text_generation__, provider_details, inference_request)
