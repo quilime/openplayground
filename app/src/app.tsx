@@ -22,7 +22,7 @@ const DEFAULT_PARAMETERS_STATE = {
   frequencyPenalty: 0.0,
   presencePenalty: 0.0,
   stopSequences: [],
-  highlightModels: false,
+  highlightModels: true,
   showProbabilities: false
 }
 

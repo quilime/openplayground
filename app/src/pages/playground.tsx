@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useContext, useEffect, useRef
+  useCallback, useContext, useEffect, useRef, useState
 } from "react"
 import {
   Editor,
@@ -270,7 +270,7 @@ class EditorWrapper extends React.Component {
       <Editor
         keyBindingFn={this.keyBindingFn.bind(this)}
         handleKeyCommand={this.handleKeyCommand.bind(this)}
-        // customStyleMap={styleMap}
+        customStyleMap={styleMap}
         editorState={editorState}
         onChange={(editorState: any) => {
           setEditorState(editorState)
@@ -333,12 +333,14 @@ const PromptCompletionEditor = ({showDialog}) => {
     passedInPrompt = ""
   ) => {
     const prompt  = regenerate ? passedInPrompt : editorState.getCurrentContent().getPlainText();
+    // const prompt = regenerate? plainTextState : plainTextState;
 
     setGenerating(true)
     setEditorContext({
       prePrompt: prompt,
       previousInternalState: convertToRaw(editorState.getCurrentContent())
     })
+
 
     const _cancel_callback = apiContext.Inference.textCompletionRequest({
       prompt: regenerate ? passedInPrompt : prompt,
@@ -577,6 +579,8 @@ const PromptCompletionEditor = ({showDialog}) => {
     ))
   )
 
+  const [plainTextState, setPlainTextState] = useState('');
+
   const editorStateRef = useRef<EditorState>(editorState)
   
   useEffect(() => {
@@ -600,6 +604,7 @@ const PromptCompletionEditor = ({showDialog}) => {
 
   useEffect(() => {
     let current_editor_state = editorState;
+    let plainTextEditorStream = '';
     try {
       for(const output_entry of output) {
         const currentContent = current_editor_state.getCurrentContent()
@@ -638,7 +643,13 @@ const PromptCompletionEditor = ({showDialog}) => {
           const scrollEl = scrollRef.current
           scrollEl.scrollTop = scrollEl.scrollHeight - scrollEl.clientHeight
         }
+        plainTextEditorStream = textWithInsert.getPlainText();
+        // console.log();
+        // current_editor_state.getCurrentContent().getPlainText(), textWithInsert.getPlainText()
       }
+
+      setPlainTextState(plainTextEditorStream)
+
     } catch (e) {
       console.log("Error in editor update", e)
     }
@@ -680,6 +691,10 @@ const PromptCompletionEditor = ({showDialog}) => {
     })
   }
   
+  function handlePlainTextInputChange(event: any) {
+    setPlainTextState(event.target.value);
+  };
+
   return (
     <form
       onSubmit={(e) => {
@@ -688,11 +703,17 @@ const PromptCompletionEditor = ({showDialog}) => {
       }}
       className="flex flex-col grow basis-auto lg:max-w-[calc(100%-266px)]"
     >
+      {/* <textarea 
+        className="bg-black h-60 font-mono" 
+        value={plainTextState}
+        onChange={handlePlainTextInputChange}
+        ></textarea> */}
       <div
         id="editor"
         ref={scrollRef}
         className="overflow-y-auto editor-container h-full w-full py-3 px-3 text-base rounded-md border border-slate-300"
       >
+        
         <EditorWrapper
           editorState = {editorState}
           setEditorState= {setEditorState}
