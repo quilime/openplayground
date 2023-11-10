@@ -1,6 +1,9 @@
 .PHONY: frontend backend
 
-all: frontend backend
+all: clean frontend backend
+
+clean:
+	rm -f --  ~/.config/openplayground/models.json
 
 install:
 	cd app && npm install
