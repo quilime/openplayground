@@ -2,7 +2,7 @@
 
 An LLM playground you can run on your laptop.
 
-Forked from [https://github.com/nat/openplayground], which appears to be abandoned. I've added more models and some cosmetic updates. Feel free to submit PR's.
+Forked from https://github.com/nat/openplayground, which appears to be abandoned. I've added more models and some cosmetic updates. Feel free to submit PR's.
 
 #### Features
 
