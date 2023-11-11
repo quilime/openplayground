@@ -7,18 +7,18 @@ export const styles = {
   },
   huggingface_local: {
     transition: "background-color 0.2s ease-in-out",
-    backgroundColor: "#31203E",
+    backgroundColor: "#314128",
     color: "#B5F7D9",
     padding: "2px 0",
   },
   cohere: {
     transition: "background-color 0.2s ease-in-out",
-    backgroundColor: "#a198e6",
+    backgroundColor: "#272154",
     padding: "2px 0",
   },
   huggingface: {
     transition: "background-color 0.2s ease-in-out",
-    backgroundColor: "#31203E",
+    backgroundColor: "#4F2728",
     color: "#B5F7D9",
     padding: "2px 0",
   },
@@ -31,7 +31,7 @@ export const styles = {
     padding: "2px 0",
   },
   aleph_alpha: {
-    backgroundColor: "#e3ff00",
+    backgroundColor: "#272727",
     padding: "2px 0",
   },
   default: {
