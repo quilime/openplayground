@@ -1,5 +1,6 @@
 export const styleMap = {
     HIGHLIGHT: {
+
       backgroundColor: "#faed27",
     },
     NORMAL: {

@@ -85,7 +85,7 @@ const HistorySidePanel = () => {
   return (
       <div className="flex flex-col h-full relative overflow-auto">
         <div
-          className="text-lg tracking-tight font-semibold text-slate-900 flex sticky top-[0] right-[0]"
+          className="font-semibold text-slate-900 flex sticky top-[0] right-[0]"
           style={{ justifyContent: "flex-end" }}
         >
           <div>
@@ -154,7 +154,7 @@ const HistorySidePanel = () => {
                 
                 return (
                   <div key = {unique_date}>
-                    <div className="text-xs tracking-tight mb-4 mt-2 font-semibold uppercase text-slate-900">
+                    <div className="text-xs mb-4 mt-2 font-semibold uppercase text-slate-900">
                       {new Date(unique_date).toLocaleDateString(
                         ["en-GB", "en-us"],
                         {
@@ -182,26 +182,17 @@ const HistorySidePanel = () => {
                               [&>div:nth-child(2)]:hover:left-[77px]
                               [&>div:nth-child(2)]:hover:border-slate-800
                               [&>div:nth-child(2)]:hover:border-2
-                              rounded-sm rounded-sm relative flex flex-row p-4 font-bold text-sm cursor-pointer click:bg-slate-300 dark:hover:bg-slate-200  ${
-                                isSelectedHistoryItem
-                                  ? "bg-slate-200"
-                                  : "hover:bg-slate-100"
-                              }`}
+                              rounded-sm rounded-sm relative flex flex-row p-4 font-bold text-sm`}
                             >
                               <div
-                                className={`bg-slate-300 w-[1px] absolute left-[80px] ${
+                                className={` w-[1px] absolute left-[80px] ${
                                   main_index === 0 && index === 0
                                     ? "h-[75%] top-[25%]"
                                     : "h-[100%] top-[0]"
                                 }`}
                               />
                               <div
-                                className={`ease-in duration-100 border rounded-full bg-white absolute top-[22px] ${
-                                  isSelectedHistoryItem
-                                    ? "border-slate-800 w-[7px] h-[7px] border-2 left-[77px]"
-                                    : "border-slate-500 w-[5px] h-[5px] left-[78px] "
-                                }
-                              `}
+                                className={`ease-in duration-100 border rounded-full absolute top-[22px]`}
                               />
                               <div className="text-xs pl-4 pr-10">
                                 {main_index === 0 && index === 0 ? (
@@ -579,7 +570,7 @@ const PromptCompletionEditor = ({showDialog}) => {
     ))
   )
 
-  const [plainTextState, setPlainTextState] = useState('');
+  // const [plainTextState, setPlainTextState] = useState('');
 
   const editorStateRef = useRef<EditorState>(editorState)
   
@@ -643,12 +634,12 @@ const PromptCompletionEditor = ({showDialog}) => {
           const scrollEl = scrollRef.current
           scrollEl.scrollTop = scrollEl.scrollHeight - scrollEl.clientHeight
         }
-        plainTextEditorStream = textWithInsert.getPlainText();
+        // plainTextEditorStream = textWithInsert.getPlainText();
         // console.log();
         // current_editor_state.getCurrentContent().getPlainText(), textWithInsert.getPlainText()
       }
 
-      setPlainTextState(plainTextEditorStream)
+      // setPlainTextState(plainTextEditorStream)
 
     } catch (e) {
       console.log("Error in editor update", e)
@@ -691,9 +682,9 @@ const PromptCompletionEditor = ({showDialog}) => {
     })
   }
   
-  function handlePlainTextInputChange(event: any) {
-    setPlainTextState(event.target.value);
-  };
+  // function handlePlainTextInputChange(event: any) {
+    // setPlainTextState(event.target.value);
+  // };
 
   return (
     <form
@@ -711,7 +702,7 @@ const PromptCompletionEditor = ({showDialog}) => {
       <div
         id="editor"
         ref={scrollRef}
-        className="overflow-y-auto editor-container h-full w-full py-3 px-3 text-base rounded-md border border-slate-300"
+        className="overflow-y-auto editor-container bg-black h-full w-full py-3 px-3 text-base rounded-md border border-slate-300"
       >
         
         <EditorWrapper
@@ -1033,12 +1024,12 @@ export default function Playground() {
         <div className="flex flex-row space-x-4 flex-grow mr-5 min-h-0 min-w-0">
           {
             historyContext.show ? (
-            <div className="hidden p-1 grow-0 shrink-0 basis-auto lg:w-[250px] overflow-auto lg:block">
+            <div className="hidden p-1 grow-0 shrink-0 basis-auto lg:w-[250px] lg:block">
               {historySidebar}
             </div>) : null
           }
           <PromptCompletionEditor showDialog = {showDialog}/>
-            <div className="hidden p-1 grow-0 shrink-0 basis-auto lg:w-[250px] overflow-auto lg:block">
+            <div className="hidden p-1 grow-0 shrink-0 basis-auto lg:w-[250px] lg:block">
               {parameterSidebar}
             </div>
         </div>

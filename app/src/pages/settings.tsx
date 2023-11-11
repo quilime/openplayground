@@ -79,9 +79,9 @@ const ProviderSearchModels = ({
 
   return (
     <>
-      <h3 className="scroll-m-20 text-xl font-extrabold tracking-tight mt-2">
+      <h2 className="font-extrabold">
         Model Search
-      </h3>
+      </h2>
       <p>
         Search for a model or part of a model to get matches from {provider} Hub
       </p>
@@ -149,7 +149,7 @@ const ProviderCredentials = ({provider, providerRequiresAPIKey, apiKey, setAPIKe
 
   return (
     <div>
-      <h3 className="scroll-m-20 text-xl font-extrabold tracking-tight mt-2">
+      <h3 className="scroll-m-20font-extrabold mt-2">
         API Key
       </h3>
       {apiKeyDescription()}
@@ -194,7 +194,7 @@ const ProviderModelSelection = ({
 
   return (
     <>
-      <h3 className="scroll-m-20 text-xl font-extrabold tracking-tight mt-2">
+      <h3 className="scroll-m-20 font-extrabold mt-2">
         Model Selection
       </h3>
       <p>
@@ -234,9 +234,9 @@ const ProviderView = (props: ProviderProps) => {
   return (
     <div className="flex col-span-6 lg:col-span-3 flex flex-row mx-2 lg:mx-0">
       <div>
-        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight">
+        <h2 className="text-xl font-extrabold">
           {provider} Setup
-        </h1>
+        </h2>
         <div className="flex-1 mt-2">
           <ProviderCredentials {...props}/>
           <ProviderModelSelection {...props}/>
@@ -283,7 +283,7 @@ const AllSelectedModels = ({enabledModels, toggleModel}: AllSelectedModelsProps)
   return (
     <div className="col-span-6 lg:col-span-2 flex flex-row mx-2 lg:mx-0 ">
       <div>
-        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight">
+        <h1 className="text-xl font-extrabold mb-8">
           Your Selected Models
         </h1>
 
@@ -458,7 +458,7 @@ export default function Settings() {
       <React.Fragment key={name}>
         <button
           className={`block w-full text-left px-2 py-1 border-l-2 ${
-            providerName === name ? "border-blue-500" : "border-transparent"
+            providerName === name ? "border-gray-100" : "border-transparent"
           }`}
           onClick={(e) => setProviderName(name)}
         >
@@ -473,12 +473,11 @@ export default function Settings() {
       <div className="flex flex-1 flex-col font-display flex-grow">
         <div className="lg:flex-grow grid gap-6 grid-cols-6 mx-1 lg:mx-5 flex flex-row">
           <div className="flex col-span-6 lg:flex-col lg:col-span-1">
-            <h1 className="scroll-m-20 text-3xl mb-5 font-extrabold tracking-tight hidden lg:inline-block">
+            <h2 className="text-xl font-extrabold hidden lg:inline-block ">
               Providers
-            </h1>
+            </h2>
             {providersButtons()}
           </div>
-
           <ProviderView
             apiKey={providerAPIKey}
             provider={providerName}

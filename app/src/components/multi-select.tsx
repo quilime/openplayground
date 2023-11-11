@@ -30,16 +30,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
       <Tooltip delayDuration={300} skipDelayDuration={150}>
         <TooltipTrigger asChild>
           <div>
-            <span className="cursor-default flow-root inline-block align-middle mb-1">
-              <p className="text-sm font-normal float-left align-text-top">
-                Stop Sequences
-              </p>
-            </span>
-            <span className="cursor-default flow-root inline-block align-middle mb-3">
-              <p className="text-xs font-normal float-left align-text-top text-gray-400">
-                Enter sequence and press Tab
-              </p>
-            </span>
+              <p className="text-sm">
+                Stop Sequences (Tab separated)
+              </p>            
             <CreatableSelect
               isDisabled={disabled}
               isMulti

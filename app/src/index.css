@@ -9,12 +9,16 @@ html, body, #app {
   @apply dark:bg-zinc-900 dark:text-slate-300 ;
 }
 
-.border {
-  @apply dark:border-slate-800;
+h2 {
+  margin-bottom:2em;
 }
 
-a {
-  @apply dark:hover:text-slate-400;
+h4 {
+  margin-bottom:0;
+}
+
+.border {
+  @apply dark:border-slate-800;
 }
 
 /* fixes overflowing on certain devices */
@@ -26,6 +30,7 @@ a {
   flex: 1 1 0;
   overflow: auto;
   font-family: monospace;
+  font-size: 1em;
 }
 .loading_border {
   padding: 11px;
@@ -39,10 +44,11 @@ a {
     linear-gradient(#334155, #334155),
     linear-gradient(#334155, #334155),
 
-    linear-gradient(rgba(226 232 240), rgba(226 232 240)),
-    linear-gradient(rgba(226 232 240), rgba(226 232 240)),
-    linear-gradient(rgba(226 232 240), rgba(226 232 240)),
-    linear-gradient(rgba(226 232 240), rgba(226 232 240));
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155),
+    linear-gradient(#334155, #334155);
+
 
   background-position: 0 0, 0 0, 0 100%, 0 100%,
                        0 0, 0 0, 0 100%, 100% 0;

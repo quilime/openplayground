@@ -120,7 +120,7 @@ const ModelCardStats = (props: any) => {
   }
 
   return (
-    <div className="flex font-medium">
+    <div className="flex text-xs text-gray-500">
       <span>{formatTime(time)}</span>
       <span className="flex-1"></span>
       <span>
@@ -214,18 +214,18 @@ const ModelCard = forwardRef((props, ref) => {
         let highlight_color = f(percentage)
 
         let custom_style = showProbabilitiesRef.current ? {
-          backgroundColor: highlight_color,
+          backgroundColor: 'white',
           padding: "2px 0",
         } : style
 
         let popoverContent = 
         (
-          <div className="shadow-xl shadow-inner rounded-sm bg-white mb-2" data-container="body">
+          <div className="shadow-xl shadow-inner rounded-sm mb-2" data-container="body">
             <ul key={children[0].key} className="grid pt-4">
               {
                 Object.entries(tokensMap).map((item, index) => {
                   return (
-                    <li key={item + "-" + index + "-" + children[0].key} className={item[0] === entityData.message ? "bg-highlight-tokens w-full font-base text-white pl-4" : "pl-4 text-bg-slate-800"}>
+                    <li key={item + "-" + index + "-" + children[0].key} className={item[0] === entityData.message ? "bg-highlight-tokens w-full pl-4" : "pl-4"}>
                       {item[0]} = {tokensMap[item[0]][1]}%
                     </li>
                   )
@@ -387,9 +387,9 @@ const ModelCard = forwardRef((props, ref) => {
   }
 
   return (
-    <div className={`flex flex-col items-center text-gray-600 text-lg font-bold h-96`}>
+    <div className={`flex flex-col items-center h-48 m-2`}>
       <div className="flex justify  max-w-[100%]">
-        <h2
+        <h3
           onClick={(event) => {
             handleSelectModel(
               model,
@@ -401,14 +401,14 @@ const ModelCard = forwardRef((props, ref) => {
             )
           }}
           className={
-            `select-none cursor-pointer text-ellipsis max-w-full whitespace-nowrap overflow-hidden ${model.selected ? "font-medium" : "font-normal"}`
+            `select-none cursor-pointer text-gray-400 max-w-full whitespace-nowrap overflow-hidden`
           }>
             {model.name}
-        </h2>
+        </h3>
       </div>
-      <div className="relative editor-container h-full w-full text-base flex mt-2" style = {{clipPath: "inset(-1px)"}}>
+      <div className="relative editor-container bg-black h-full w-full text-base flex" style = {{clipPath: "inset(-1px)"}}>
         <div
-          className={`font-medium relative p-3 overflow-hidden flex-1 flex flex-col loading_border ${border_class}`}
+          className={`font-medium relative p-3 overflow-hidden flex-1 flex flex-col  loading_border ${border_class}`}
         >
           <ModelEditor {...props} editorState ={editorState} setEditorState ={setEditorState} />
           <ModelCardStats
@@ -477,14 +477,9 @@ function PromptEditor({editorState, setEditorState, ...props}: any) {
     <div
       ref={scrollRef}
       onClick={focusEditor}
-      className="overflow-y-auto editor-container h-[100%] w-full text-base"
+      className="editor-container bg-black p-3 h-[100%] w-full text-base"
     >
       <Editor
-        placeholder={
-        number_of_models_enabled >= 1
-          ? "Type your prompt here..."
-          : "No models have been enabled..."
-        }
         ref={editorRef}
         keyBindingFn={keyBindingFn}
         handleKeyCommand={handleKeyCommand}
@@ -600,16 +595,17 @@ function PromptArea({showDialog}) {
 
   return (
     <form
-      className="flex flex-col grow basis-auto min-h-[25%] max-h-[75%] overflow-auto"
+      className="flex flex-col grow min-h-[30%] max-h-[75%] overflow-auto"
       onSubmit={(e) => {
         e.preventDefault()
         handleSubmit()
       }}
     >
-    <div className="flex-1 flex border border-slate-400">
-      <div className={`relative overflow-hidden flex-1 flex flex-col p-2`}>
+    <div className="flex-1 flex border border-gray-900">
         <PromptEditor editorState = {editorState} setEditorState = {setEditorState}/>
-        <div className="absolute bottom-[.5em] right-[1em] z-[2]">
+    </div>
+
+    <div className="my-4">
           {generating && (
             <Tooltip delayDuration={100}>
             <TooltipTrigger asChild>
@@ -668,9 +664,8 @@ function PromptArea({showDialog}) {
             </TooltipContent>
           </Tooltip>
           )}
-        </div>
-      </div>
     </div>
+    
   </form>
   )
 }
@@ -789,42 +784,24 @@ const ModelsCompletion = ({showDialog}) => {
   }, []);
 
   return (
-    <TransitionGroup
-      className={`grid h-full mt-3 pr-1 overflow-auto 
-        ${
-          number_of_models_enabled === 1 
-          ? "grid-cols-1 gap-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2"
-          : number_of_models_enabled === 2 
-          ? "grid-cols-1 gap-3 sm:grid-cols-1 md:grid-cols-2"
-          : number_of_models_enabled === 3
-          ? "grid-cols-1 gap-3 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
-          : number_of_models_enabled === 4 
-          ? "grid-cols-1 gap-3 gap-3 sm:grid-cols-1 md:grid-cols-2"
-          : "grid-cols-1 gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-4 5xl:grid-cols-5 6xl:grid-cols-6 8xl:grid-cols-8"
-        }
-      `}
+    <div
+      className={'grid mt-3 pr-1 md:grid-cols-2 lg:grid-cols-3'}
     > {
       modelsStateContext
         .filter((modelState) => modelState.enabled && modelState.tag)
         .map((modelState) => (
-          <CSSTransition
-            key ={modelState.tag}
-            timeout={500}
-            classNames="fade"
-            unmountOnExit>
-            <ModelCard
-              key={modelState.tag}
-              ref={(ref) => (modelEditorRefs.current[modelState.tag] = ref) }
-              completion = {modelsCompletionState[modelState.tag] || []} 
-              model={modelState}
-              showProbabilities={parametersContext.showProbabilities}
-              showHighlights={parametersContext.highlightModels}
-              />
-            </CSSTransition>
+          <ModelCard
+            key={modelState.tag}
+            ref={(ref) => (modelEditorRefs.current[modelState.tag] = ref) }
+            completion = {modelsCompletionState[modelState.tag] || []} 
+            model={modelState}
+            showProbabilities={parametersContext.showProbabilities}
+            showHighlights={parametersContext.highlightModels}
+            />
           )
         )
       }
-    </TransitionGroup>
+    </div>
   )
 }
 
@@ -836,7 +813,7 @@ const ParametersTable = () => {
 
   const generate_headers = () => (
     ["Model", "ML", "T", "TP", "TK", "FP", "PP", "RP"].map((header, index) => (
-      <div className={`text-center font-normal ${index === 0 ? "min-w-[150px] sticky top-[0] left-[0] z-[1] bg-white" : "min-w-[150px] flex-1"}`}>
+      <div className={`text-center font-normal ${index === 0 ? "min-w-[150px] sticky top-[0] left-[0] z-[1]" : "min-w-[150px] flex-1"}`}>
         {header}
       </div>
     )
@@ -852,9 +829,9 @@ const ParametersTable = () => {
     return (
       <div className="flex-1">
         <div className = "mx-4 relative flx items-center">
-          <div className="rounded-md bg-slate-200 w-[100%] h-[3px]"/>
+          <div className="rounded-md bg-gray-600 w-[100%] h-[3px]"/>
           <div
-            className="rounded-md bg-slate-600 absolute h-[3px] top-[0px] ease-in duration-300"
+            className="rounded-md bg-slate-300 absolute h-[3px] top-[0px] ease-in duration-300"
             style={{ width: `${100 * (parameterValue / parameterDefaults.range[1])}%`}}
           />
         </div>
@@ -870,11 +847,11 @@ const ParametersTable = () => {
       "name", "maximumLength", "temperature", "topP", "topK", "frequencyPenalty", "presencePenalty", "repetitionPenalty"
     ].map((parameter, index) => (
       (parameter === "name") ?
-        <div className={`py-1 bg-inherit text-center font-light min-w-[150px] max-w-[150px] left-[0px] z-[2] sticky whitespace-nowrap text-ellipsis overflow-hidden ${modelState.selected ? "font-medium" : ""}`}>
+        <div className={`bg-black text-center font-light min-w-[150px] max-w-[150px] left-[0px] z-[2] sticky whitespace-nowrap text-ellipsis overflow-hidden`}>
           <span>{modelState.name.split(":")[1]}</span>
         </div>
         :
-      <div className="bg-inherit text-center font-light relative min-w-[150px] flex flex-1 items-center">
+      <div className="bg-inherit text-center font-light pt-2 relative min-w-[150px] flex flex-1 items-center">
         {generate_table_line_graph(modelState.parameters[parameter], model.defaultParameters[parameter])}
       </div>
     ))
@@ -886,7 +863,7 @@ const ParametersTable = () => {
       .map((modelState) => {
         return (<div
           key={modelState.tag}
-          className={`cursor-pointer flex flex-row hover:bg-slate-100 ${modelState.selected ? "bg-slate-100" : "bg-white"}`}
+          className={`cursor-pointer flex flex-row`}
           onClick={(event) => {
             handleSelectModel(
               modelState,
@@ -906,11 +883,11 @@ const ParametersTable = () => {
     <div>
       {!parametersContext.showParametersTable || number_of_models_enabled === 0 ? null :
         <div className="flex mt-4 justify-center">
-          <div className="rounded-sm border border-slate-200 max-h-[350px] max-w-[1400px] overflow-auto">
-            <div className="flex flex-col m-2 min-w-[900px]">
-              <div className="flex flex-row sticky top-[0] z-[3] bg-white">
+          <div className="p-5 border max-h-[350px] max-w-[1400px] overflow-auto">
+              <div className="flex flex-row sticky top-[0] z-[3]">
                 {generate_headers()}
-              </div>
+              </div>            
+            <div className="flex flex-col m-2 min-w-[900px]">
                 {generate_rows()}
             </div>
           </div>
@@ -989,7 +966,7 @@ export default function Compare() {
             <ParametersTable showDialog = {showDialog}/>
             <ModelsCompletion showDialog = {showDialog}/>
           </div>
-        <div className="hidden p-1 grow-0 shrink-0 basis-auto lg:w-[250px] overflow-auto lg:block">
+        <div className="hidden p-1 grow-0 shrink-0 basis-auto lg:w-[250px] lg:block">
           {parametersSidePanel}
         </div>
       </div>

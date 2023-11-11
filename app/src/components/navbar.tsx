@@ -14,8 +14,8 @@ export default function NavBar({ tab, children }: any) {
         <p
           className={
             tab === menuName
-            ? "text-xl font-semibold"
-            : "text-xl font-medium text-gray-500 hover:text-gray-900"
+            ? " font-semibold"
+            : " font-medium text-gray-500"
           }
         >
           {menuName.charAt(0).toUpperCase() + menuName.slice(1)}
@@ -25,7 +25,7 @@ export default function NavBar({ tab, children }: any) {
   ))
 
   return (
-    <div className="flex flex-col font-display mb-3 border">
+    <div className="flex flex-col font-display mb-3">
       <div className="flex inline-block mx-5 my-4 gap-x-4 flex-wrap">
         {menu}
 

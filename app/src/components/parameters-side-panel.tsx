@@ -247,17 +247,11 @@ const ParametersSidePanel = ({ showModelDropdown, showModelList }) => {
     return (
       <div
         key={`selected_${modelState.tag}`}
-        className={`relative select-none my-2 flex justify-center items-center rounded-md border border-slate-200 font-mono text-sm dark:border-slate-700 overflow-hidden ${
-          modelState.selected ? "bg-slate-200 dark:bg-slate-200" : ""
-        } ${
-          modelState.enabled
-            ? "cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-200"
-            : ""
-        }`}
+        className={`relative select-none my-2 flex justify-center items-center rounded-md border font-mono text-sm dark:border-slate-700 overflow-hidden`}
       >
         <div
           className={`pl-4 py-3 flex-1 overflow-hidden ${
-            !modelState.enabled ? "text-zinc-400" : ""
+            !modelState.enabled ? "text-gray-600" : ""
           }`}
           onClick={(event) => {
             if (modelState.enabled)
@@ -419,7 +413,7 @@ const ParametersSidePanel = ({ showModelDropdown, showModelList }) => {
               className={`mx-1 cursor-pointer flex justify-center items-center w-[24px] h-[24px] rounded-full border-[1px] border-slate-200 select-none ${
                 parametersContext.showParametersTable
                   ? "text-white bg-slate-700"
-                  : "hover:text-white hover:bg-slate-700 text-slate-600 bg-white"
+                  : "hover:text-white hover:bg-slate-700 text-slate-600 "
               }`}
             >
               <BarChart2 size={18} />
