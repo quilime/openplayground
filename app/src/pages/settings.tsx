@@ -257,7 +257,7 @@ const AllSelectedModels = ({enabledModels, toggleModel}: AllSelectedModelsProps)
     return enabledModels.map((model: any) => (
       <div
         key={`selected_${model.name}_${model.provider}`}
-        className="rounded-md border border-slate-200 px-4 py-3 my-2 font-mono text-sm dark:border-slate-700"
+        className="rounded-md border border-slate-200 px-4 py-3 my-2 font-mono text-sm dark:border-slate-700 truncate text-ellipsis"
       > 
         {model.name}
         <br/>
@@ -281,7 +281,7 @@ const AllSelectedModels = ({enabledModels, toggleModel}: AllSelectedModelsProps)
     ))
   }
   return (
-    <div className="col-span-6 lg:col-span-2 flex flex-row mx-2 lg:mx-0 ">
+    <div className="col-span-6 lg:col-span-2 flex flex-row mx-2 lg:mx max-w-sm">
       <div>
         <h1 className="text-xl font-extrabold mb-8">
           Your Selected Models
@@ -290,10 +290,8 @@ const AllSelectedModels = ({enabledModels, toggleModel}: AllSelectedModelsProps)
         <div className="mt-1">
           <p>These models will be available in the menu dropdown</p>
         </div>
-        <div className="">
-          <div>
+        <div className="max-w-xs">
             {selectedModelsCard()}
-          </div>
         </div>
       </div>
     </div>
