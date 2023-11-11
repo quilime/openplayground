@@ -10,31 +10,31 @@ import { useBreakpoint } from "../hooks/use-breakpoint"
 import { useToast } from "../hooks/ui/use-toast"
 
 interface Provider {
-  name: string;
-  remoteInference: boolean;
-  requiresApiKey: boolean;
-  apiKey: string;
-  models: Model[];
-  searchUrl: string | null;
+  name: string
+  remoteInference: boolean
+  requiresApiKey: boolean
+  apiKey: string
+  models: Model[]
+  searchUrl: string | null
 }
 
 interface Model {
-  name: string;
-  enabled: boolean;
-  provider: string;
+  name: string
+  enabled: boolean
+  provider: string
 }
 
 interface ProviderProps {
-  provider: string;
-  providerModels: Model[];
-  providerSearchURL: string;
-  providerSearchResults: any[];
-  providerRequiresAPIKey: boolean;
-  providerRemoteInference: boolean;
-  apiKey: string;
-  searchProviderModels: (provider: string, query: string) => void;
-  setAPIKey: (key: string) => void;
-  toggleModel: (provider: string, model: string) => void;
+  provider: string
+  providerModels: Model[]
+  providerSearchURL: string
+  providerSearchResults: any[]
+  providerRequiresAPIKey: boolean
+  providerRemoteInference: boolean
+  apiKey: string
+  searchProviderModels: (provider: string, query: string) => void
+  setAPIKey: (key: string) => void
+  toggleModel: (provider: string, model: string) => void
 }
 
 const ProviderSearchModels = ({
@@ -45,7 +45,7 @@ const ProviderSearchModels = ({
   providerSearchURL,
   providerSearchResults,
   searchProviderModels,
-  toggleModel
+  toggleModel,
 }: ProviderProps) => {
   if (!providerSearchURL) return null
 
@@ -56,32 +56,32 @@ const ProviderSearchModels = ({
   const searchModel = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const searchQuery = e.target.elements["model-query"].value
-      
+
     searchProviderModels(provider, searchQuery)
   }
 
-  const searchResults = () => providerSearchResults.map((modelName: any) => (
-    <div
-      key={modelName}
-      className="rounded-md border border-slate-200 px-4 py-3 my-2 font-mono text-sm dark:border-slate-700"
-    >
-      {modelName}
-      <Checkbox
+  const searchResults = () =>
+    providerSearchResults.map((modelName: any) => (
+      <div
         key={modelName}
-        className="float-right"
-        onCheckedChange={(event) =>
-          handleModelSelect(modelName, event)
-        }
-        checked={providerModels.find(({name}) => name === modelName)?.enabled || false}
-      />
-    </div>
-  ))
+        className="rounded-md border border-slate-200 px-4 py-3 my-2 font-mono text-sm dark:border-slate-700"
+      >
+        {modelName}
+        <Checkbox
+          key={modelName}
+          className="float-right"
+          onCheckedChange={(event) => handleModelSelect(modelName, event)}
+          checked={
+            providerModels.find(({ name }) => name === modelName)?.enabled ||
+            false
+          }
+        />
+      </div>
+    ))
 
   return (
     <>
-      <h2 className="font-extrabold">
-        Model Search
-      </h2>
+      <h2 className="font-extrabold">Model Search</h2>
       <p>
         Search for a model or part of a model to get matches from {provider} Hub
       </p>
@@ -89,15 +89,19 @@ const ProviderSearchModels = ({
       <form onSubmit={searchModel}>
         <div className="flex w-full max-w-sm items-center space-x-2 mt-2">
           <Input
-            disabled = {providerRequiresAPIKey && (apiKey === "" || apiKey === null)}
+            disabled={
+              providerRequiresAPIKey && (apiKey === "" || apiKey === null)
+            }
             type="text"
             id="model-query"
-             placeholder="Search Query"
+            placeholder="Search Query"
             className="flex text-left placeholder:text-left h-10 w-full rounded-md border border-slate-300 bg-transparent py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
           />
           <Button
             type="submit"
-            disabled = {providerRequiresAPIKey && (apiKey === "" || apiKey === null)}
+            disabled={
+              providerRequiresAPIKey && (apiKey === "" || apiKey === null)
+            }
           >
             Search
           </Button>
@@ -106,17 +110,20 @@ const ProviderSearchModels = ({
 
       <div>
         <div className="min-h-[320px] w-full border rounded-md mt-2">
-          <div className="p-2">  
-            {searchResults()}
-          </div>
+          <div className="p-2">{searchResults()}</div>
         </div>
       </div>
     </>
   )
 }
 
-const ProviderCredentials = ({provider, providerRequiresAPIKey, apiKey, setAPIKey}: ProviderProps) => {
-  if (!providerRequiresAPIKey) return null;
+const ProviderCredentials = ({
+  provider,
+  providerRequiresAPIKey,
+  apiKey,
+  setAPIKey,
+}: ProviderProps) => {
+  if (!providerRequiresAPIKey) return null
 
   const [revealAPIKey, setRevealAPIKey] = useState<boolean>(false)
   const [apiKeyCopy, setAPIKeyCopy] = React.useState<string>(apiKey)
@@ -125,18 +132,18 @@ const ProviderCredentials = ({provider, providerRequiresAPIKey, apiKey, setAPIKe
     setAPIKeyCopy(apiKey)
   }, [apiKey])
 
-  
   const apiKeyDescription = () => {
-    if (apiKey !== null && apiKey !== "") return null;
+    if (apiKey !== null && apiKey !== "") return null
 
     return (
       <>
         <p className="text-red-500">
           <b>No API key is saved for {provider}</b>
         </p>
-            
+
         <p>
-          Your API key allows us make generation requests for you in the playground
+          Your API key allows us make generation requests for you in the
+          playground
         </p>
       </>
     )
@@ -149,9 +156,7 @@ const ProviderCredentials = ({provider, providerRequiresAPIKey, apiKey, setAPIKe
 
   return (
     <div>
-      <h3 className="scroll-m-20font-extrabold mt-2">
-        API Key
-      </h3>
+      <h3 className="scroll-m-20font-extrabold mt-2">API Key</h3>
       {apiKeyDescription()}
       <form onSubmit={handleAPIKeySubmit}>
         <div className="flex w-full max-w-lg items-center space-x-2 mt-2">
@@ -162,14 +167,17 @@ const ProviderCredentials = ({provider, providerRequiresAPIKey, apiKey, setAPIKe
             onChange={(e) => setAPIKeyCopy(e.target.value)}
             className="flex text-left placeholder:text-left h-8 w-full rounded-md border border-slate-300 bg-transparent py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
           />
-           
+
           <div
             key={provider}
-            onClick={() => setRevealAPIKey(e => !e)}
-            className="cursor-pointer">
-            {
-              revealAPIKey ? <EyeIcon className="h-5 w-5 align-middle" /> : <EyeOffIcon className="h-5 w-5 align-middle" />
-            }
+            onClick={() => setRevealAPIKey((e) => !e)}
+            className="cursor-pointer"
+          >
+            {revealAPIKey ? (
+              <EyeIcon className="h-5 w-5 align-middle" />
+            ) : (
+              <EyeOffIcon className="h-5 w-5 align-middle" />
+            )}
           </div>
           <Button type="submit">Save</Button>
         </div>
@@ -182,44 +190,45 @@ const ProviderModelSelection = ({
   provider,
   apiKey,
   providerRequiresAPIKey,
-  providerModels, toggleModel
+  providerModels,
+  toggleModel,
 }: ProviderProps) => {
   const handleModelSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
-  
+
   const handleModelSelect = (model: string, checked: boolean) => {
     toggleModel(provider, model)
   }
 
   return (
     <>
-      <h3 className="scroll-m-20 font-extrabold mt-2">
-        Model Selection
-      </h3>
+      <h3 className="scroll-m-20 font-extrabold mt-2">Model Selection</h3>
       <p>
-        Please select from the following models to show in the
-        dropdown in playground
+        Please select from the following models to show in the dropdown in
+        playground
       </p>
       <form onSubmit={handleModelSubmit}>
         <div className="min-h-[320px] w-full border rounded-md mt-2">
           <div className="p-2">
             {providerModels.map((model: any) => (
-            <div
-              key={model.name}
-              className="rounded-md border border-slate-200 px-4 py-3 my-2 font-mono text-sm dark:border-slate-700"
-            >
-              {model.name}
-              <Checkbox
-                key={model}
-                className="float-right"
-                disabled={providerRequiresAPIKey && (apiKey === "" || apiKey === null)}
-                onCheckedChange={(event) =>
-                  handleModelSelect(model.name, event)
-                }
-                checked={model.enabled}
-              />
-            </div>
+              <div
+                key={model.name}
+                className="rounded-md border border-slate-200 px-4 py-3 my-2 font-mono text-sm dark:border-slate-700"
+              >
+                {model.name}
+                <Checkbox
+                  key={model}
+                  className="float-right"
+                  disabled={
+                    providerRequiresAPIKey && (apiKey === "" || apiKey === null)
+                  }
+                  onCheckedChange={(event) =>
+                    handleModelSelect(model.name, event)
+                  }
+                  checked={model.enabled}
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -229,18 +238,16 @@ const ProviderModelSelection = ({
 }
 
 const ProviderView = (props: ProviderProps) => {
-  const {provider} = props
+  const { provider } = props
 
   return (
     <div className="flex col-span-6 lg:col-span-3 flex flex-row mx-2 lg:mx-0">
       <div>
-        <h2 className="text-xl font-extrabold">
-          {provider} Setup
-        </h2>
+        <h2 className="text-xl font-extrabold">{provider} Setup</h2>
         <div className="flex-1 mt-2">
-          <ProviderCredentials {...props}/>
-          <ProviderModelSelection {...props}/>
-          <ProviderSearchModels {...props}/>
+          <ProviderCredentials {...props} />
+          <ProviderModelSelection {...props} />
+          <ProviderSearchModels {...props} />
         </div>
       </div>
     </div>
@@ -248,20 +255,23 @@ const ProviderView = (props: ProviderProps) => {
 }
 
 interface AllSelectedModelsProps {
-  enabledModels: Model[];
-  toggleModel: ProviderProps["toggleModel"];
+  enabledModels: Model[]
+  toggleModel: ProviderProps["toggleModel"]
 }
 
-const AllSelectedModels = ({enabledModels, toggleModel}: AllSelectedModelsProps) => {  
+const AllSelectedModels = ({
+  enabledModels,
+  toggleModel,
+}: AllSelectedModelsProps) => {
   const selectedModelsCard = () => {
     return enabledModels.map((model: any) => (
       <div
         key={`selected_${model.name}_${model.provider}`}
         className="rounded-md border border-slate-200 px-4 py-3 my-2 font-mono text-sm dark:border-slate-700 truncate text-ellipsis"
-      > 
+      >
         {model.name}
-        <br/>
-        <span style={{"fontSize": "12px"}}>
+        <br />
+        <span style={{ fontSize: "12px" }}>
           Provider:
           <i>{model.provider}</i>
         </span>
@@ -272,9 +282,9 @@ const AllSelectedModels = ({enabledModels, toggleModel}: AllSelectedModelsProps)
         >
           <X className="h-4 w-4" />
         </button>
-        <br/>
-        <span
-          style={{"fontSize": "12px"}}>Status:
+        <br />
+        <span style={{ fontSize: "12px" }}>
+          Status:
           <i>{model.status}</i>
         </span>
       </div>
@@ -283,16 +293,12 @@ const AllSelectedModels = ({enabledModels, toggleModel}: AllSelectedModelsProps)
   return (
     <div className="col-span-6 lg:col-span-2 flex flex-row mx-2 lg:mx max-w-sm">
       <div>
-        <h1 className="text-xl font-extrabold mb-8">
-          Your Selected Models
-        </h1>
+        <h1 className="text-xl font-extrabold mb-8">Your Selected Models</h1>
 
         <div className="mt-1">
           <p>These models will be available in the menu dropdown</p>
         </div>
-        <div className="max-w-xs">
-            {selectedModelsCard()}
-        </div>
+        <div className="max-w-xs">{selectedModelsCard()}</div>
       </div>
     </div>
   )
@@ -301,35 +307,44 @@ const AllSelectedModels = ({enabledModels, toggleModel}: AllSelectedModelsProps)
 export default function Settings() {
   const apiContext = useContext(APIContext)
 
-  const [providers, setProviders] = React.useState<{[key: string]: Provider}>({});
+  const [providers, setProviders] = React.useState<{ [key: string]: Provider }>(
+    {}
+  )
 
   const [provider, setProvider] = React.useState<Provider | {}>({})
   const [providerName, setProviderName] = React.useState<string>("openai")
   const [providerSearchURL, setProviderSearchURL] = React.useState<any>(null)
   const [providerAPIKey, setProviderAPIKey] = React.useState<string>("")
-  const [providerRequiresAPIKey, setProviderRequiresAPIKey] = React.useState<boolean>(true)
-  const [providerRemoteInference, setProviderRemoteInference] = React.useState<boolean>(true)
+  const [providerRequiresAPIKey, setProviderRequiresAPIKey] =
+    React.useState<boolean>(true)
+  const [providerRemoteInference, setProviderRemoteInference] =
+    React.useState<boolean>(true)
   const [providerModels, setProviderModels] = React.useState<any[]>([])
-  const [providerSearchResults, setProviderSearchResults] = React.useState<any[]>([])
+  const [providerSearchResults, setProviderSearchResults] = React.useState<
+    any[]
+  >([])
 
   const [enabledModels, setEnabledModels] = React.useState<Model[]>([])
 
-  const {toast} = useToast()
-  const {isLg} = useBreakpoint("lg")
+  const { toast } = useToast()
+  const { isLg } = useBreakpoint("lg")
 
   useEffect(() => {
     const preloadData = async () => {
-      const providersWithModels: { [key: string]: Provider } = await apiContext.Provider.getAllWithModels()
+      const providersWithModels: { [key: string]: Provider } =
+        await apiContext.Provider.getAllWithModels()
 
       const _enabledModels = Object.entries(providersWithModels)
-        .map(([_, provider]: [string, Provider]) => provider.models.filter(({enabled}: {enabled: boolean}) => enabled))
+        .map(([_, provider]: [string, Provider]) =>
+          provider.models.filter(({ enabled }: { enabled: boolean }) => enabled)
+        )
         .flat()
 
       setProviders(providersWithModels)
       setEnabledModels(_enabledModels)
-    };    
-    
-    const notificationCallback = ({event, data, meta}) => {
+    }
+
+    const notificationCallback = ({ event, data, meta }) => {
       switch (event) {
         case "modelAdded":
           toast({
@@ -338,7 +353,7 @@ export default function Settings() {
           })
 
           preloadData().catch(console.error)
-        break;
+          break
 
         case "modelRemoved":
           toast({
@@ -347,25 +362,25 @@ export default function Settings() {
           })
 
           preloadData().catch(console.error)
-        break;
+          break
 
         default:
-          console.log("Unknown event????", event, data);
-        break;
+          console.log("Unknown event????", event, data)
+          break
       }
     }
-    
+
     apiContext.Notifications.subscribe(notificationCallback)
     preloadData().catch(console.error)
     return () => {
-      apiContext.Notifications.unsubscribe(notificationCallback);
-    };
-  }, []);
+      apiContext.Notifications.unsubscribe(notificationCallback)
+    }
+  }, [])
 
   useEffect(() => {
-    if (Object.keys(providers).length === 0) return;
+    if (Object.keys(providers).length === 0) return
 
-    const currentProvider: Provider = providers[providerName]; 
+    const currentProvider: Provider = providers[providerName]
 
     setProvider(currentProvider)
     setProviderAPIKey(currentProvider.apiKey)
@@ -373,25 +388,27 @@ export default function Settings() {
     setProviderRequiresAPIKey(currentProvider.requiresApiKey)
     setProviderRemoteInference(currentProvider.remoteInference)
     setProviderSearchURL(currentProvider.searchUrl)
-    setProviderSearchResults((provider.name === currentProvider.name) ? providerSearchResults : [])
+    setProviderSearchResults(
+      provider.name === currentProvider.name ? providerSearchResults : []
+    )
   }, [providerName, providers])
 
-  const setAPIKey = async (apiKey: string ) => { 
+  const setAPIKey = async (apiKey: string) => {
     try {
-      await apiContext.Provider.setAPIKey(providerName, apiKey);
+      await apiContext.Provider.setAPIKey(providerName, apiKey)
 
       toast({
         title: "API Key Saved",
         description: `${providerName} API key is saved and ready for generations!`,
       })
-      
+
       setProviders({
         ...providers,
         [providerName]: {
           ...providers[providerName],
-          apiKey
-        }
-      })   
+          apiKey,
+        },
+      })
     } catch (error) {
       toast({
         title: "API Key Error",
@@ -402,9 +419,14 @@ export default function Settings() {
 
   const toggleModel = async (providerName: string, modelName: string) => {
     try {
-      const {enabled, model} = await apiContext.Model.toggle(providerName, modelName);
-     
-      const providerModel = providers[providerName].models.find((m) => m.name === modelName)
+      const { enabled, model } = await apiContext.Model.toggle(
+        providerName,
+        modelName
+      )
+
+      const providerModel = providers[providerName].models.find(
+        (m) => m.name === modelName
+      )
       if (providerModel) {
         providerModel.enabled = enabled
       } else {
@@ -415,10 +437,10 @@ export default function Settings() {
         ...providers,
         [providerName]: {
           ...providers[providerName],
-          models: providerModels
-        }
+          models: providerModels,
+        },
       })
-      
+
       let _newEnabledModels = enabledModels
 
       if (enabled) {
@@ -426,7 +448,9 @@ export default function Settings() {
           _newEnabledModels.push(model)
         }
       } else {
-        _newEnabledModels = _newEnabledModels.filter((m) => m.name !== modelName)
+        _newEnabledModels = _newEnabledModels.filter(
+          (m) => m.name !== modelName
+        )
       }
 
       setEnabledModels(_newEnabledModels)
@@ -438,9 +462,12 @@ export default function Settings() {
     }
   }
 
-  const searchProviderModels = async (providerName: string, searchTerm: string) => {
+  const searchProviderModels = async (
+    providerName: string,
+    searchTerm: string
+  ) => {
     try {
-      const models = await apiContext.Model.search(providerName, searchTerm);
+      const models = await apiContext.Model.search(providerName, searchTerm)
 
       setProviderSearchResults(models.map((model: any) => model.name))
     } catch (error) {
@@ -451,8 +478,8 @@ export default function Settings() {
     }
   }
 
-  const providersButtons = () => 
-    Object.entries(providers).map(([name, _]) => 
+  const providersButtons = () =>
+    Object.entries(providers).map(([name, _]) => (
       <React.Fragment key={name}>
         <button
           className={`block w-full text-left px-2 py-1 border-l-2 ${
@@ -460,10 +487,12 @@ export default function Settings() {
           }`}
           onClick={(e) => setProviderName(name)}
         >
-          <span className={providerName === name ? "font-bold": "font-normal"}>{name}</span>
+          <span className={providerName === name ? "font-bold" : "font-normal"}>
+            {name}
+          </span>
         </button>
       </React.Fragment>
-    )
+    ))
 
   return (
     <div className="flex flex-col pb-10">
@@ -484,10 +513,9 @@ export default function Settings() {
             providerModels={providerModels}
             providerSearchURL={providerSearchURL}
             providerSearchResults={providerSearchResults}
-
             searchProviderModels={searchProviderModels}
-            setAPIKey = {setAPIKey}
-            toggleModel = {toggleModel}
+            setAPIKey={setAPIKey}
+            toggleModel={toggleModel}
           />
 
           <AllSelectedModels
