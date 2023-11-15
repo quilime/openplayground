@@ -32,12 +32,6 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           <div>
             <p className="text-sm">Stop Sequences (Tab separated)</p>
             <CreatableSelect
-              styles={{
-                control: (baseStyles, state) => ({
-                  ...baseStyles,
-                  background: '#f0f',
-                }),
-              }}
               isDisabled={disabled}
               isMulti
               placeholder=""
