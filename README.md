@@ -46,8 +46,6 @@ make clean
 [i5]: https://github.com/quilime/openplayground/issues/5
 [i6]: https://github.com/quilime/openplayground/issues/6
 
-### llama.cpp
-
 ## Adding models to openplayground
 
 Models and providers have three types in openplayground:
