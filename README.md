@@ -30,7 +30,7 @@ make backend
 make clean
 ```
 
-## Ideas for contributions
+## Contributions welcome. Some ideas:
 
 - Add a token counter [#1][i1]
 - Ability to Delete local Hugging Face models from the cache [#2][i2]
