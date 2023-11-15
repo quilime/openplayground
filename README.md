@@ -32,13 +32,19 @@ make clean
 
 ## Ideas for contributions
 
-- Add a token counter
-- Ability to Delete local Hugging Face models from the cache.
-- Display progress-bar when downloading Hugging Face models.
-- Add a cost counter compare page
-- Measure and display time to first token
-- The default parameters for each model are configured in the `server/models.json` file. 
-- Chatgpt plugin support
+- Add a token counter [#1][i1]
+- Ability to Delete local Hugging Face models from the cache [#2][i2]
+- Display progress-bar when downloading Hugging Face models [#3][i3]
+- Add a cost counter compare page [#4][i4]
+- Measure and display time to first token [#5][i5]
+- Chatgpt plugin support [#6][i6]
+
+[i1]: https://github.com/quilime/openplayground/issues/1
+[i2]: https://github.com/quilime/openplayground/issues/2
+[i3]: https://github.com/quilime/openplayground/issues/3
+[i4]: https://github.com/quilime/openplayground/issues/4
+[i5]: https://github.com/quilime/openplayground/issues/5
+[i6]: https://github.com/quilime/openplayground/issues/6
 
 ### llama.cpp
 
