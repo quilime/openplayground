@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 interface MultiSelectProps {
   maxOptions?: number
   tooltipContent: React.ReactElement
-  defaultOptions: any,
+  defaultOptions: any
   disabled?: boolean
   onValueChange: (value: any) => void
 }
@@ -30,10 +30,14 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
       <Tooltip delayDuration={300} skipDelayDuration={150}>
         <TooltipTrigger asChild>
           <div>
-              <p className="text-sm">
-                Stop Sequences (Tab separated)
-              </p>            
+            <p className="text-sm">Stop Sequences (Tab separated)</p>
             <CreatableSelect
+              styles={{
+                control: (baseStyles, state) => ({
+                  ...baseStyles,
+                  background: '#f0f',
+                }),
+              }}
               isDisabled={disabled}
               isMulti
               placeholder=""
@@ -48,11 +52,8 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
               }}
               isValidNewOption={(inputValue, options) => {
                 if (inputValue.length < 1) return false
-
                 if (maxOptions == null) return true
-
                 if (options.length >= maxOptions) return false
-
                 return true
               }}
               onChange={(e) => {

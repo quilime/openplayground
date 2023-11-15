@@ -691,10 +691,11 @@ const PromptCompletionEditor = ({ showDialog }) => {
         currentContent.createEntity("HIGHLIGHTED_WORD", "MUTABLE", output_entry)
 
         const entityKey = currentContent.getLastCreatedEntityKey()
+        const message = output_entry.message.replace('<0x0A>', '\n');
         const textWithInsert = Modifier.insertText(
           currentContent,
           selection,
-          output_entry.message,
+          message,
           null,
           entityKey
         )
@@ -761,10 +762,6 @@ const PromptCompletionEditor = ({ showDialog }) => {
       previousInternalState: null,
     })
   }
-
-  // function handlePlainTextInputChange(event: any) {
-  // setPlainTextState(event.target.value);
-  // };
 
   return (
     <form

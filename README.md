@@ -1,8 +1,8 @@
 # openplayground
 
-An LLM playground you can run on your laptop.
+An LLM playground.
 
-Forked from https://github.com/nat/openplayground, which appears to be abandoned. I've added more models and some cosmetic updates. Feel free to submit PR's.
+Forked from https://github.com/nat/openplayground, I've added more default models and some cosmetic updates. Feel free to submit PR's.
 
 #### Features
 
@@ -12,6 +12,7 @@ Forked from https://github.com/nat/openplayground, which appears to be abandoned
 - Automatically detects local models in your HuggingFace cache, and lets you install new ones.
 - Works OK on your phone.
 - Probably won't kill everyone.
+
 
 ## How to run for development
 
@@ -32,6 +33,7 @@ make clean
 ## Ideas for contributions
 
 - Add a token counter
+- Ability to Delete local Hugging Face models from the cache.
 - Add a cost counter compare page
 - Measure and display time to first token
 - The default parameters for each model are configured in the `server/models.json` file. 
@@ -50,6 +52,7 @@ Models and providers have three types in openplayground:
 - API
 
 You can add models in `server/models.json` with the following schema:
+
 
 #### Local inference
 
@@ -76,6 +79,7 @@ For models running locally on your device you can add them to openplayground lik
 
 Keep in mind you will need to add a generation method for your model in `server/app.py`. Take a look at `local_text_generation()` as an example.
 
+
 #### API Provider Inference
 
 This is for model providers like OpenAI, cohere, forefront, and more. You can connect them easily into openplayground (a minimal example):
@@ -99,7 +103,7 @@ This is for model providers like OpenAI, cohere, forefront, and more. You can co
 }
 ```
 
-Keep in mind you will need to add a generation method for your model in `server/app.py`. Take a look at `openai_text_generation()` or `cohere_text_generation()` as an example.
+You will need to add a generation method for your model in `server/app.py`. Take a look at `openai_text_generation()` or `cohere_text_generation()` as an example.
 
 #### Searchable models
 

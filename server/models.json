@@ -603,34 +603,5 @@
         }
       }
     }
-  },
-  "openplayground": {
-    "requiresAPIKey": false,
-    "remoteInference": false,
-    "searchURL": "https://openplayground.filler/api/search?q={searchQuery}",
-    "defaultCapabilities": [],
-    "defaultParameters": {
-      "temperature": {
-        "value": 1,
-        "range": [0.1, 1]
-      },
-      "maximumLength": {
-        "value": 200,
-        "range": [50, 1024]
-      },
-      "topP": {
-        "value": 1,
-        "range": [0.1, 1]
-      },
-      "topK": {
-        "value": 1,
-        "range": [1, 500]
-      },
-      "repetitionPenalty": {
-        "value": 1,
-        "range": [0.1, 2]
-      }
-    },
-    "models": {}
   }
 }
