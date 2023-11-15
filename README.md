@@ -34,11 +34,10 @@ make clean
 
 - Add a token counter
 - Ability to Delete local Hugging Face models from the cache.
+- Display progress-bar when downloading Hugging Face models.
 - Add a cost counter compare page
 - Measure and display time to first token
 - The default parameters for each model are configured in the `server/models.json` file. 
-- If you find better default parameters for a model, please submit a PR
-- Markdown rendering
 - Chatgpt plugin support
 
 ### llama.cpp
