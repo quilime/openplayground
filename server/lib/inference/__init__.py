@@ -203,10 +203,10 @@ class InferenceManager:
 
         current_date = datetime.now().strftime("%Y-%m-%d")
 
-        if inference_request.model_name == "gpt-4":
-            system_content = "You are GPT-4, a large language model trained by OpenAI. Answer as concisely as possible"
+        if "gpt-4" in inference_request.model_name:
+            system_content = f"You are GPT-4, a large language model trained by OpenAI. Answer as concisely as possible. The current date is {current_date}"
         else:
-            system_content = f"You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible. Knowledge cutoff: 2021-09-01 Current date: {current_date}"
+            system_content = f"You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible. The current date is {current_date}"
 
         response = openai.ChatCompletion.create(
              model=inference_request.model_name,
@@ -332,6 +332,10 @@ class InferenceManager:
             "gpt-3.5-turbo-16k",
             "gpt-3.5-turbo-1106",
             "gpt-4",
+            "gpt-4-0613",
+            "gpt-4-32k",
+            "gpt-4-1106-preview",
+            "gpt-4-turbo-preview",
             "claude-instant-1.2",
             "claude-2.0",
             "claude-2.1"
