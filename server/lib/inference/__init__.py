@@ -332,7 +332,9 @@ class InferenceManager:
             "gpt-3.5-turbo-16k",
             "gpt-3.5-turbo-1106",
             "gpt-4",
-            "gpt-4-1106-preview",
+            "claude-instant-1.2",
+            "claude-2.0",
+            "claude-2.1"
         ]
 
         if inference_request.model_name in chat_models:
