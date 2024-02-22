@@ -336,9 +336,6 @@ class InferenceManager:
             "gpt-4-32k",
             "gpt-4-1106-preview",
             "gpt-4-turbo-preview",
-            "claude-instant-1.2",
-            "claude-2.0",
-            "claude-2.1"
         ]
 
         if inference_request.model_name in chat_models:
@@ -617,9 +614,9 @@ class InferenceManager:
        self.__error_handler__(self.__local_text_generation__, provider_details, inference_request)
     
     def __anthropic_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        c = anthropic.Client(provider_details.api_key)
+        c = anthropic.Client(api_key=provider_details.api_key)
 
-        response = c.completion_stream(
+        response = c.completions.create(
             prompt=f"{anthropic.HUMAN_PROMPT} {inference_request.prompt}{anthropic.AI_PROMPT}",
             stop_sequences=[anthropic.HUMAN_PROMPT] + inference_request.model_parameters['stopSequences'],
             temperature=float(inference_request.model_parameters['temperature']),
@@ -633,23 +630,24 @@ class InferenceManager:
         cancelled = False
 
         for data in response:
-            new_completion = data["completion"]
-            generated_token = new_completion[len(completion):]
-            if cancelled: continue
+            print(data)
+            # new_completion = data["completion"]
+            # generated_token = new_completion[len(completion):]
+            # if cancelled: continue
 
-            if not self.announcer.announce(InferenceResult(
-                uuid=inference_request.uuid,
-                model_name=inference_request.model_name,
-                model_tag=inference_request.model_tag,
-                model_provider=inference_request.model_provider,
-                token=generated_token,
-                probability=None,
-                top_n_distribution=None
-             ), event="infer"):
-                cancelled = True
-                logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
+            # if not self.announcer.announce(InferenceResult(
+            #     uuid=inference_request.uuid,
+            #     model_name=inference_request.model_name,
+            #     model_tag=inference_request.model_tag,
+            #     model_provider=inference_request.model_provider,
+            #     token=generated_token,
+            #     probability=None,
+            #     top_n_distribution=None
+            #  ), event="infer"):
+            #     cancelled = True
+            #     logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
 
-            completion = new_completion
+            # completion = new_completion
 
     def anthropic_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         self.__error_handler__(self.__anthropic_text_generation__, provider_details, inference_request)
