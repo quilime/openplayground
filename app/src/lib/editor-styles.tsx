@@ -13,7 +13,7 @@ export const styles = {
   },
   cohere: {
     transition: "background-color 0.2s ease-in-out",
-    backgroundColor: "#272154",
+    backgroundColor: "#272154aa",
     padding: "2px 0",
   },
   huggingface: {
@@ -27,7 +27,8 @@ export const styles = {
     padding: "2px 0",
   },
   anthropic: {
-    backgroundColor: "#cc785c55",
+    color: "#eee",
+    backgroundColor: "#49E6E433",
     padding: "2px 0",
   },
   aleph_alpha: {

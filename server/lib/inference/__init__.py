@@ -200,7 +200,7 @@ class InferenceManager:
     def __openai_chat_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         openai.api_key = provider_details.api_key
 
-
+        current_date = datetime.now().strftime("%Y-%m-%d")
 
         if "gpt-4" in inference_request.model_name:
             system_content = f"You are GPT-4, a large language model trained by OpenAI. Answer as concisely as possible. The current date is {current_date}"

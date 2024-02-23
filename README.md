@@ -17,6 +17,10 @@ Forked from https://github.com/nat/openplayground, I've added more default model
 ## How to run for development
 
 ```sh
+# set up python env
+python -m venv venv
+source venv/bin/activate
+
 # install
 make install
 
@@ -25,6 +29,8 @@ make frontend
 
 # in another terminal
 make backend
+# or
+make backend-dev
 
 # clean config (after making changes to model.json)
 make clean
