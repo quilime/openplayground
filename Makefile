@@ -18,4 +18,7 @@ install-backend:
 
 backend:
 	python3 -m server.app --port 5555
+
+backend-dev:
+	nodemon -e py --exec $(MAKE) backend
 	
