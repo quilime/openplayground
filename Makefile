@@ -14,10 +14,10 @@ frontend:
 	cd app && npx parcel watch src/index.html --no-cache 
 
 install-backend:
-	cd server && pip3.10 install -r requirements.txt
+	cd server && pip install -r requirements.txt
 
 backend:
-	python3 -m server.app --port 5555
+	python -m server.app --port 5555
 
 backend-dev:
 	nodemon -e py --exec $(MAKE) backend
