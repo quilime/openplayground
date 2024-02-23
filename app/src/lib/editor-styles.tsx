@@ -27,7 +27,7 @@ export const styles = {
     padding: "2px 0",
   },
   anthropic: {
-    backgroundColor: "#cc785c80",
+    backgroundColor: "#cc785c55",
     padding: "2px 0",
   },
   aleph_alpha: {

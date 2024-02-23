@@ -18,7 +18,6 @@ from .huggingface.hf import HFInference
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
 @dataclass
 class ProviderDetails:
     '''
@@ -96,7 +95,7 @@ class InferenceAnnouncer:
         }
 
         if infer_result.probability is not None:
-            encoded["prob"] = round(math.exp(infer_result.probability) * 100, 2) 
+            encoded["prob"] = round(math.exp(infer_result.probability) * 100, 2)
 
         if infer_result.top_n_distribution is not None:
             encoded["topNDistribution"] = {
@@ -106,7 +105,7 @@ class InferenceAnnouncer:
             }
 
         return json.dumps({"data": encoded, "type": event})
-    
+
     def announce(self, infer_result: InferenceResult, event: str):
         if infer_result.uuid in self.cancel_cache:
             return False
@@ -127,8 +126,8 @@ class InferenceAnnouncer:
             data = json.loads(message['data'])
             uuid = data['uuid']
             logger.info(f"Received cancel message for uuid: {uuid}")
-            self.cancel_cache[uuid] = True      
-   
+            self.cancel_cache[uuid] = True
+
 class InferenceManager:
     def __init__(self, sse_topic):
         self.announcer = InferenceAnnouncer(sse_topic)
@@ -197,11 +196,11 @@ class InferenceManager:
                 infer_result.token = "[COMPLETED]"
             self.announcer.announce(infer_result, event="status")
             logger.info(f"Completed inference for {inference_request.model_name} on {inference_request.model_provider}")
-    
+
     def __openai_chat_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         openai.api_key = provider_details.api_key
 
-        current_date = datetime.now().strftime("%Y-%m-%d")
+
 
         if "gpt-4" in inference_request.model_name:
             system_content = f"You are GPT-4, a large language model trained by OpenAI. Answer as concisely as possible. The current date is {current_date}"
@@ -289,15 +288,15 @@ class InferenceManager:
 
                     if token == generated_token:
                         chosen_log_prob = round(log_prob, 2)
-  
+
                     prob_dist.simple_prob_sum += simple_prob
-                
+
                 prob_dist.tokens = dict(
                     sorted(prob_dist.tokens.items(), key=lambda item: item[1][0], reverse=True)
                 )
                 prob_dist.log_prob_sum = chosen_log_prob
                 prob_dist.simple_prob_sum = round(prob_dist.simple_prob_sum, 2)
-             
+
                 infer_response = InferenceResult(
                     uuid=inference_request.uuid,
                     model_name=inference_request.model_name,
@@ -325,7 +324,7 @@ class InferenceManager:
                 logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
 
     def openai_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        
+
         # TODO: Add a meta field to the inference so we know when a model is chat vs text
         chat_models = [
             "gpt-3.5-turbo",
@@ -389,7 +388,7 @@ class InferenceManager:
 
     def cohere_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         self.__error_handler__(self.__cohere_text_generation__, provider_details, inference_request)
-    
+
     def __huggingface_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         response = requests.request("POST",
             f"https://api-inference.huggingface.co/models/{inference_request.model_name}",
@@ -468,7 +467,7 @@ class InferenceManager:
                 ):
                     cancelled = True
                     logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
-           
+
     def huggingface_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         self.__error_handler__(self.__huggingface_text_generation__, provider_details, inference_request)
 
@@ -605,19 +604,37 @@ class InferenceManager:
                 probability=None,
                 top_n_distribution=None
             )
-        
+
             if not self.announcer.announce(infer_response, event="infer"):
                 cancelled = True
                 logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
 
     def local_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
        self.__error_handler__(self.__local_text_generation__, provider_details, inference_request)
-    
+
     def __anthropic_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         c = anthropic.Client(api_key=provider_details.api_key)
 
+        current_date = datetime.now().strftime("%Y-%m-%d")
+
+        SYSTEM_PROMPT = '''
+        You are Claude, trained by Anthropic.
+
+        When writing code, you should write high-quality code
+        for the given task, something a very skilled expert would write. You are
+        writing code for an experienced developer so only add comments for things
+        that are non-obvious. Make sure to include any imports required.
+
+        Check your work carefully to make sure there are no mistakes, errors, or
+        inconsistencies. If there are errors, outline them.
+
+        Answer as concisely as possible.
+
+        The current date is {current_date}
+        '''
+
         response = c.completions.create(
-            prompt=f"{anthropic.HUMAN_PROMPT} {inference_request.prompt}{anthropic.AI_PROMPT}",
+            prompt=f"{SYSTEM_PROMPT} \n\n{anthropic.HUMAN_PROMPT} {inference_request.prompt} {anthropic.AI_PROMPT}",
             stop_sequences=[anthropic.HUMAN_PROMPT] + inference_request.model_parameters['stopSequences'],
             temperature=float(inference_request.model_parameters['temperature']),
             top_p=float(inference_request.model_parameters['topP']),
@@ -628,7 +645,7 @@ class InferenceManager:
 
         completion = ""
         cancelled = False
-        
+
         for data in response:
             self.announcer.announce(InferenceResult(
                 uuid=data.id,
@@ -642,10 +659,10 @@ class InferenceManager:
 
     def anthropic_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         self.__error_handler__(self.__anthropic_text_generation__, provider_details, inference_request)
-    
+
     def __aleph_alpha_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         client = aleph_client(provider_details.api_key)
-        
+
         request = CompletionRequest(
             prompt = Prompt.from_text(inference_request.prompt),
             temperature= inference_request.model_parameters['temperature'],
@@ -655,9 +672,9 @@ class InferenceManager:
             presence_penalty=float(inference_request.model_parameters['repetitionPenalty']),
             stop_sequences=inference_request.model_parameters['stopSequences']
         )
-        
+
         response = client.complete(request, model=inference_request.model_name)
-        
+
         self.announcer.announce(InferenceResult(
             uuid=inference_request.uuid,
             model_name=inference_request.model_name,
@@ -670,6 +687,6 @@ class InferenceManager:
 
     def aleph_alpha_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         self.__error_handler__(self.__aleph_alpha_text_generation__, provider_details, inference_request)
-    
+
     def get_announcer(self):
-        return self.announcer 
+        return self.announcer
