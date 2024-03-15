@@ -214,10 +214,11 @@ const APIContextWrapper = ({children}) => {
     Inference,
   });
   
-  function createTextCompletionRequest({prompt, models}) {
+  function createTextCompletionRequest({prompt, systemPrompt, models}) {
     const url = "/api/inference/text/stream";
     const payload = {
       prompt: prompt,
+      systemPrompt: systemPrompt,
       models: models,
     };
     return createCompletionRequest(url, payload, textCompletionSubscribers);

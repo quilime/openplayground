@@ -33,9 +33,10 @@ def stream_inference():
 
     request_uuid = "1"
     prompt = data['prompt']
+    systemPrompt = data['systemPrompt']
     models = data['models']
     
-    all_tasks = [task for task in (create_inference_request(model, storage, prompt, request_uuid) for model in models) if task is not None]
+    all_tasks = [task for task in (create_inference_request(model, storage, prompt, systemPrompt, request_uuid) for model in models) if task is not None]
 
     if not all_tasks:
         return create_response_message("Invalid Request", 400)
@@ -48,7 +49,7 @@ def stream_inference():
 def is_valid_request_data(data):
     return isinstance(data['prompt'], str) and isinstance(data['models'], list)
 
-def create_inference_request(model, storage, prompt, request_uuid):
+def create_inference_request(model, storage, prompt, systemPrompt, request_uuid):
     model_name, provider_name, model_tag, parameters = extract_model_data(model)
     model_name = model_name.removeprefix(f"{provider_name}:")
     provider = next((provider for provider in storage.get_providers() if provider.name == provider_name), None)
@@ -57,7 +58,7 @@ def create_inference_request(model, storage, prompt, request_uuid):
     
     if validate_parameters(provider.get_model(model_name), parameters):
         return InferenceRequest(uuid=request_uuid, model_name=model_name, model_tag=model_tag,
-            model_provider=provider_name, model_parameters=parameters, prompt=prompt
+            model_provider=provider_name, model_parameters=parameters, prompt=prompt, systemPrompt=systemPrompt
         )
 
     return None

@@ -353,7 +353,6 @@ const PromptCompletionEditor = ({ showDialog }) => {
     const prompt = regenerate
       ? passedInPrompt
       : editorState.getCurrentContent().getPlainText()
-    // const prompt = regenerate? plainTextState : plainTextState;
 
     setGenerating(true)
     setEditorContext({
@@ -363,6 +362,7 @@ const PromptCompletionEditor = ({ showDialog }) => {
 
     const _cancel_callback = apiContext.Inference.textCompletionRequest({
       prompt: regenerate ? passedInPrompt : prompt,
+      systemPrompt: systemPrompt ?? '',
       models: modelsStateContext
         .map((modelState) => {
           if (modelState.selected) {
@@ -648,7 +648,7 @@ const PromptCompletionEditor = ({ showDialog }) => {
     )
   )
 
-  // const [plainTextState, setPlainTextState] = useState('');
+  const [systemPrompt, setSystemPrompt] = React.useState('Current Date: ' + new Date().toLocaleDateString());
 
   const editorStateRef = useRef<EditorState>(editorState)
 
@@ -771,15 +771,17 @@ const PromptCompletionEditor = ({ showDialog }) => {
       }}
       className="flex flex-col grow basis-auto lg:max-w-[calc(100%-266px)]"
     >
-      {/* <textarea 
-        className="bg-black h-60 font-mono" 
-        value={plainTextState}
-        onChange={handlePlainTextInputChange}
-        ></textarea> */}
+      <textarea 
+        id="systemPrompt"
+        name="system"
+        value={systemPrompt}
+        onChange={(e) => { setSystemPrompt(e.target.value) }}
+        className="overflow-y-auto editor-container bg-black w-full p-3 text-base rounded-md border border-slate-300 mb-5" 
+        >{systemPrompt}</textarea>
       <div
         id="editor"
         ref={scrollRef}
-        className="overflow-y-auto editor-container bg-black h-full w-full py-3 px-3 text-base rounded-md border border-slate-300"
+        className="overflow-y-auto editor-container bg-black h-full w-full p-3 text-base rounded-md border border-slate-300"
       >
         <EditorWrapper
           editorState={editorState}

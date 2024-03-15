@@ -658,6 +658,7 @@ function PromptArea({ showDialog }) {
 
     const _cancel_callback = apiContext.Inference.textCompletionRequest({
       prompt: regenerate ? passedInPrompt : prompt,
+      systemPrompt: '',
       models: modelsStateContext
         .map((modelState) => {
           if (modelState.enabled) {

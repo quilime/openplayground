@@ -5,8 +5,12 @@
 html, body, #app {
   height: 100%;
   max-height: 100%;
-  font-family: "Quicksand", sans-serif;
+  font-family: sans-serif;
   @apply dark:bg-zinc-900 dark:text-slate-300 ;
+}
+
+textarea {
+  font-family: monospace;
 }
 
 h2 {

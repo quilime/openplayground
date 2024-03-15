@@ -43,6 +43,7 @@ class InferenceRequest:
         model_provider (str): provider of model to use
         model_parameters (dict): parameters for model
         prompt (str): prompt to use for inference
+        systemPrompt (str): systemPrompt to use for inference
     """
 
     uuid: str
@@ -51,6 +52,7 @@ class InferenceRequest:
     model_provider: str
     model_parameters: dict
     prompt: str
+    systemPrompt: str
 
 
 @dataclass
@@ -231,17 +233,10 @@ class InferenceManager:
     ):
         openai.api_key = provider_details.api_key
 
-        current_date = datetime.now().strftime("%Y-%m-%d")
-
-        if "gpt-4" in inference_request.model_name:
-            system_content = f"You are GPT-4, a large language model trained by OpenAI. Answer as concisely as possible. The current date is {current_date}"
-        else:
-            system_content = f"You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible. The current date is {current_date}"
-
         response = openai.ChatCompletion.create(
             model=inference_request.model_name,
             messages=[
-                {"role": "system", "content": system_content},
+                {"role": "system", "content": inference_request.systemPrompt},
                 {"role": "user", "content": inference_request.prompt},
             ],
             temperature=inference_request.model_parameters["temperature"],
@@ -409,7 +404,7 @@ class InferenceManager:
             },
             data=json.dumps(
                 {
-                    "prompt": inference_request.prompt,
+                    "prompt": f"System Prompt:\n{inference_request.prompt} \n\n User:\n{inference_request.prompt}",
                     "model": inference_request.model_name,
                     "temperature": float(
                         inference_request.model_parameters["temperature"]
@@ -764,32 +759,12 @@ class InferenceManager:
 
         claude3 = re.search("claude-3", inference_request.model_name)
 
-        current_date = datetime.now().strftime("%Y-%m-%d")
-
-        SYSTEM_PROMPT = """
-        You are Claude, trained by Anthropic.
-
-        When writing code, you should write high-quality code
-        for the given task, something a very skilled expert would write. You are
-        writing code for an experienced developer so only add comments for things
-        that are non-obvious. Make sure to include any imports required.
-
-        Check your work carefully to make sure there are no mistakes, errors, or
-        inconsistencies. If there are errors, outline them.
-
-        Answer as concisely as possible.
-
-        The current date is {current_date}
-        """
-
-        logger.info("print output here for anthropic")
-
         response = ""
         if claude3:
 
             with c.messages.stream(
                 max_tokens=inference_request.model_parameters["maximumLength"],
-                system=SYSTEM_PROMPT,
+                system=inference_request.systemPrompt,
                 temperature=float(inference_request.model_parameters["temperature"]),
                 messages=[{"role": "user", "content": f"{inference_request.prompt}"}],
                 model=inference_request.model_name,
