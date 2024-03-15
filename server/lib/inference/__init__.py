@@ -19,19 +19,23 @@ from .huggingface.hf import HFInference
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+
 @dataclass
 class ProviderDetails:
-    '''
+    """
     Args:
         api_key (str): API key for provider
         version_key (str): version key for provider
-    '''
+    """
+
     api_key: str
     version_key: str
 
+
 @dataclass
 class InferenceRequest:
-    '''
+    """
     Args:
         uuid (str): unique identifier for inference request
         model_name (str): name of model to use
@@ -39,7 +43,8 @@ class InferenceRequest:
         model_provider (str): provider of model to use
         model_parameters (dict): parameters for model
         prompt (str): prompt to use for inference
-    '''
+    """
+
     uuid: str
     model_name: str
     model_tag: str
@@ -47,21 +52,24 @@ class InferenceRequest:
     model_parameters: dict
     prompt: str
 
+
 @dataclass
 class ProablityDistribution:
-    '''
+    """
     Args:
         log_prob_sum (float): sum of log probabilities
         simple_prob_sum (float): sum of simple probabilities
         tokens (dict): dictionary of tokens and their probabilities
-    '''
+    """
+
     log_prob_sum: float
     simple_prob_sum: float
     tokens: dict
 
+
 @dataclass
 class InferenceResult:
-    '''
+    """
     Args:
         uuid (str): unique identifier for inference request
         model_name (str): name of model to use
@@ -70,7 +78,8 @@ class InferenceResult:
         token (str): token returned by inference
         probability (float): probability of token
         top_n_distribution (ProablityDistribution): top n distribution of tokens
-    '''
+    """
+
     uuid: str
     model_name: str
     model_tag: str
@@ -79,7 +88,9 @@ class InferenceResult:
     probability: Union[float, None]
     top_n_distribution: Union[ProablityDistribution, None]
 
+
 InferenceFunction = Callable[[str, InferenceRequest], None]
+
 
 class InferenceAnnouncer:
     def __init__(self, sse_topic):
@@ -102,7 +113,7 @@ class InferenceAnnouncer:
             encoded["topNDistribution"] = {
                 "logProbSum": infer_result.top_n_distribution.log_prob_sum,
                 "simpleProbSum": infer_result.top_n_distribution.simple_prob_sum,
-                "tokens": infer_result.top_n_distribution.tokens
+                "tokens": infer_result.top_n_distribution.tokens,
             }
 
         return json.dumps({"data": encoded, "type": event})
@@ -117,24 +128,34 @@ class InferenceAnnouncer:
         else:
             message = self.__format_message__(event=event, infer_result=infer_result)
 
-        logger.debug(f"Announcing {event} for uuid: {infer_result.uuid}, message: {message}")
+        logger.debug(
+            f"Announcing {event} for uuid: {infer_result.uuid}, message: {message}"
+        )
         self.sse_topic.publish(message)
 
         return True
 
     def cancel_callback(self, message):
-        if message['type'] == 'pmessage':
-            data = json.loads(message['data'])
-            uuid = data['uuid']
+        if message["type"] == "pmessage":
+            data = json.loads(message["data"])
+            uuid = data["uuid"]
             logger.info(f"Received cancel message for uuid: {uuid}")
             self.cancel_cache[uuid] = True
+
 
 class InferenceManager:
     def __init__(self, sse_topic):
         self.announcer = InferenceAnnouncer(sse_topic)
 
-    def __error_handler__(self, inference_fn: InferenceFunction, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        logger.info(f"Requesting inference from {inference_request.model_name} on {inference_request.model_provider}")
+    def __error_handler__(
+        self,
+        inference_fn: InferenceFunction,
+        provider_details: ProviderDetails,
+        inference_request: InferenceRequest,
+    ):
+        logger.info(
+            f"Requesting inference from {inference_request.model_name} on {inference_request.model_provider}"
+        )
         infer_result = InferenceResult(
             uuid=inference_request.uuid,
             model_name=inference_request.model_name,
@@ -142,18 +163,21 @@ class InferenceManager:
             model_provider=inference_request.model_provider,
             token=None,
             probability=None,
-            top_n_distribution=None
+            top_n_distribution=None,
         )
 
-        if not self.announcer.announce(InferenceResult(
-            uuid=inference_request.uuid,
-            model_name=inference_request.model_name,
-            model_tag=inference_request.model_tag,
-            model_provider=inference_request.model_provider,
-            token="[INITIALIZING]",
-            probability=None,
-            top_n_distribution=None
-        ), event="status"):
+        if not self.announcer.announce(
+            InferenceResult(
+                uuid=inference_request.uuid,
+                model_name=inference_request.model_name,
+                model_tag=inference_request.model_tag,
+                model_provider=inference_request.model_provider,
+                token="[INITIALIZING]",
+                probability=None,
+                top_n_distribution=None,
+            ),
+            event="status",
+        ):
             return
 
         try:
@@ -185,7 +209,9 @@ class InferenceManager:
         except ValueError as e:
             if infer_result.model_provider == "huggingface-local":
                 infer_result.token = f"[ERROR] Error parsing response from local inference: {traceback.format_exc()}"
-                logger.error(f"Error parsing response from local inference: {traceback.format_exc()}")
+                logger.error(
+                    f"Error parsing response from local inference: {traceback.format_exc()}"
+                )
             else:
                 infer_result.token = f"[ERROR] Error parsing response from API: {e}"
                 logger.error(f"Error parsing response from API: {e}")
@@ -196,9 +222,13 @@ class InferenceManager:
             if infer_result.token is None:
                 infer_result.token = "[COMPLETED]"
             self.announcer.announce(infer_result, event="status")
-            logger.info(f"Completed inference for {inference_request.model_name} on {inference_request.model_provider}")
+            logger.info(
+                f"Completed inference for {inference_request.model_name} on {inference_request.model_provider}"
+            )
 
-    def __openai_chat_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
+    def __openai_chat_generation__(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
         openai.api_key = provider_details.api_key
 
         current_date = datetime.now().strftime("%Y-%m-%d")
@@ -209,29 +239,29 @@ class InferenceManager:
             system_content = f"You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible. The current date is {current_date}"
 
         response = openai.ChatCompletion.create(
-             model=inference_request.model_name,
-             messages = [
+            model=inference_request.model_name,
+            messages=[
                 {"role": "system", "content": system_content},
                 {"role": "user", "content": inference_request.prompt},
             ],
-            temperature=inference_request.model_parameters['temperature'],
-            max_tokens=inference_request.model_parameters['maximumLength'],
-            top_p=inference_request.model_parameters['topP'],
-            frequency_penalty=inference_request.model_parameters['frequencyPenalty'],
-            presence_penalty=inference_request.model_parameters['presencePenalty'],
+            temperature=inference_request.model_parameters["temperature"],
+            max_tokens=inference_request.model_parameters["maximumLength"],
+            top_p=inference_request.model_parameters["topP"],
+            frequency_penalty=inference_request.model_parameters["frequencyPenalty"],
+            presence_penalty=inference_request.model_parameters["presencePenalty"],
             stream=True,
-            timeout=60
+            timeout=60,
         )
 
         tokens = ""
         cancelled = False
 
         for event in response:
-            response = event['choices'][0]
-            if response['finish_reason'] == "stop":
+            response = event["choices"][0]
+            if response["finish_reason"] == "stop":
                 break
 
-            delta = response['delta']
+            delta = response["delta"]
 
             if "content" not in delta:
                 continue
@@ -246,41 +276,52 @@ class InferenceManager:
                 model_provider=inference_request.model_provider,
                 token=generated_token,
                 probability=None,
-                top_n_distribution=None
-             )
+                top_n_distribution=None,
+            )
 
-            if cancelled: continue
+            if cancelled:
+                continue
 
             if not self.announcer.announce(infer_response, event="infer"):
                 cancelled = True
-                logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
+                logger.info(
+                    f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}"
+                )
 
-    def __openai_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
+    def __openai_text_generation__(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
         openai.api_key = provider_details.api_key
 
         response = openai.Completion.create(
             model=inference_request.model_name,
             prompt=inference_request.prompt,
-            temperature=inference_request.model_parameters['temperature'],
-            max_tokens=inference_request.model_parameters['maximumLength'],
-            top_p=inference_request.model_parameters['topP'],
-            stop=None if len(inference_request.model_parameters['stopSequences']) == 0 else inference_request.model_parameters['stopSequences'],
-            frequency_penalty=inference_request.model_parameters['frequencyPenalty'],
-            presence_penalty=inference_request.model_parameters['presencePenalty'],
+            temperature=inference_request.model_parameters["temperature"],
+            max_tokens=inference_request.model_parameters["maximumLength"],
+            top_p=inference_request.model_parameters["topP"],
+            stop=(
+                None
+                if len(inference_request.model_parameters["stopSequences"]) == 0
+                else inference_request.model_parameters["stopSequences"]
+            ),
+            frequency_penalty=inference_request.model_parameters["frequencyPenalty"],
+            presence_penalty=inference_request.model_parameters["presencePenalty"],
             logprobs=5,
-            stream=True
+            stream=True,
         )
         cancelled = False
 
         for event in response:
-            generated_token = event['choices'][0]['text']
+            generated_token = event["choices"][0]["text"]
             infer_response = None
             try:
                 chosen_log_prob = 0
-                likelihood = event['choices'][0]["logprobs"]['top_logprobs'][0]
+                likelihood = event["choices"][0]["logprobs"]["top_logprobs"][0]
 
                 prob_dist = ProablityDistribution(
-                    log_prob_sum=0, simple_prob_sum=0, tokens={},
+                    log_prob_sum=0,
+                    simple_prob_sum=0,
+                    tokens={},
                 )
 
                 for token, log_prob in likelihood.items():
@@ -293,7 +334,11 @@ class InferenceManager:
                     prob_dist.simple_prob_sum += simple_prob
 
                 prob_dist.tokens = dict(
-                    sorted(prob_dist.tokens.items(), key=lambda item: item[1][0], reverse=True)
+                    sorted(
+                        prob_dist.tokens.items(),
+                        key=lambda item: item[1][0],
+                        reverse=True,
+                    )
                 )
                 prob_dist.log_prob_sum = chosen_log_prob
                 prob_dist.simple_prob_sum = round(prob_dist.simple_prob_sum, 2)
@@ -304,8 +349,8 @@ class InferenceManager:
                     model_tag=inference_request.model_tag,
                     model_provider=inference_request.model_provider,
                     token=generated_token,
-                    probability=event['choices'][0]['logprobs']['token_logprobs'][0],
-                    top_n_distribution=prob_dist
+                    probability=event["choices"][0]["logprobs"]["token_logprobs"][0],
+                    top_n_distribution=prob_dist,
                 )
             except IndexError:
                 infer_response = InferenceResult(
@@ -315,16 +360,21 @@ class InferenceManager:
                     model_provider=inference_request.model_provider,
                     token=generated_token,
                     probability=-1,
-                    top_n_distribution=None
+                    top_n_distribution=None,
                 )
 
-            if cancelled: continue
+            if cancelled:
+                continue
 
             if not self.announcer.announce(infer_response, event="infer"):
                 cancelled = True
-                logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
+                logger.info(
+                    f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}"
+                )
 
-    def openai_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
+    def openai_text_generation(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
 
         # TODO: Add a meta field to the inference so we know when a model is chat vs text
         chat_models = [
@@ -339,77 +389,115 @@ class InferenceManager:
         ]
 
         if inference_request.model_name in chat_models:
-            self.__error_handler__(self.__openai_chat_generation__, provider_details, inference_request)
+            self.__error_handler__(
+                self.__openai_chat_generation__, provider_details, inference_request
+            )
         else:
-            self.__error_handler__(self.__openai_text_generation__, provider_details, inference_request)
+            self.__error_handler__(
+                self.__openai_text_generation__, provider_details, inference_request
+            )
 
-    def __cohere_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        with requests.post("https://api.cohere.ai/generate",
+    def __cohere_text_generation__(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
+        with requests.post(
+            "https://api.cohere.ai/generate",
             headers={
                 "Authorization": f"Bearer {provider_details.api_key}",
                 "Content-Type": "application/json",
                 "Cohere-Version": "2021-11-08",
             },
-            data=json.dumps({
-                "prompt": inference_request.prompt,
-                "model": inference_request.model_name,
-                "temperature": float(inference_request.model_parameters['temperature']),
-                "p": float(inference_request.model_parameters['topP']),
-                "k": int(inference_request.model_parameters['topK']),
-                "stopSequences": inference_request.model_parameters['stopSequences'],
-                "frequencyPenalty": float(inference_request.model_parameters['frequencyPenalty']),
-                "presencePenalty": float(inference_request.model_parameters['presencePenalty']),
-                "return_likelihoods": "GENERATION",
-                "max_tokens": int(inference_request.model_parameters['maximumLength']),
-                "stream": True,
-            }),
-            stream=True
+            data=json.dumps(
+                {
+                    "prompt": inference_request.prompt,
+                    "model": inference_request.model_name,
+                    "temperature": float(
+                        inference_request.model_parameters["temperature"]
+                    ),
+                    "p": float(inference_request.model_parameters["topP"]),
+                    "k": int(inference_request.model_parameters["topK"]),
+                    "stopSequences": inference_request.model_parameters[
+                        "stopSequences"
+                    ],
+                    "frequencyPenalty": float(
+                        inference_request.model_parameters["frequencyPenalty"]
+                    ),
+                    "presencePenalty": float(
+                        inference_request.model_parameters["presencePenalty"]
+                    ),
+                    "return_likelihoods": "GENERATION",
+                    "max_tokens": int(
+                        inference_request.model_parameters["maximumLength"]
+                    ),
+                    "stream": True,
+                }
+            ),
+            stream=True,
         ) as response:
             if response.status_code != 200:
-                raise Exception(f"Request failed: {response.status_code} {response.reason}")
+                raise Exception(
+                    f"Request failed: {response.status_code} {response.reason}"
+                )
 
             cancelled = False
 
             for token in response.iter_lines():
-                token = token.decode('utf-8')
+                token = token.decode("utf-8")
                 token_json = json.loads(token)
-                if cancelled: continue
+                if cancelled:
+                    continue
 
-                if not self.announcer.announce(InferenceResult(
-                    uuid=inference_request.uuid,
-                    model_name=inference_request.model_name,
-                    model_tag=inference_request.model_tag,
-                    model_provider=inference_request.model_provider,
-                    token=token_json['text'],
-                    probability=None, #token_json['likelihood']
-                    top_n_distribution=None
-                ), event="infer"):
+                if not self.announcer.announce(
+                    InferenceResult(
+                        uuid=inference_request.uuid,
+                        model_name=inference_request.model_name,
+                        model_tag=inference_request.model_tag,
+                        model_provider=inference_request.model_provider,
+                        token=token_json["text"],
+                        probability=None,  # token_json['likelihood']
+                        top_n_distribution=None,
+                    ),
+                    event="infer",
+                ):
                     cancelled = True
-                    logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
+                    logger.info(
+                        f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}"
+                    )
 
-    def cohere_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        self.__error_handler__(self.__cohere_text_generation__, provider_details, inference_request)
+    def cohere_text_generation(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
+        self.__error_handler__(
+            self.__cohere_text_generation__, provider_details, inference_request
+        )
 
-    def __huggingface_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        response = requests.request("POST",
+    def __huggingface_text_generation__(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
+        response = requests.request(
+            "POST",
             f"https://api-inference.huggingface.co/models/{inference_request.model_name}",
             headers={"Authorization": f"Bearer {provider_details.api_key}"},
             json={
                 "inputs": inference_request.prompt,
                 "stream": True,
                 "parameters": {
-                    "max_length": min(inference_request.model_parameters['maximumLength'], 250), # max out at 250 tokens per request, we should handle for this in client side but just in case
-                    "temperature": inference_request.model_parameters['temperature'],
-                    "top_k": inference_request.model_parameters['topK'],
-                    "top_p": inference_request.model_parameters['topP'],
-                    "repetition_penalty": inference_request.model_parameters['repetitionPenalty'],
-                    "stop_sequences": inference_request.model_parameters['stopSequences'],
+                    "max_length": min(
+                        inference_request.model_parameters["maximumLength"], 250
+                    ),  # max out at 250 tokens per request, we should handle for this in client side but just in case
+                    "temperature": inference_request.model_parameters["temperature"],
+                    "top_k": inference_request.model_parameters["topK"],
+                    "top_p": inference_request.model_parameters["topP"],
+                    "repetition_penalty": inference_request.model_parameters[
+                        "repetitionPenalty"
+                    ],
+                    "stop_sequences": inference_request.model_parameters[
+                        "stopSequences"
+                    ],
                 },
-                "options": {
-                    "use_cache": False
-                }
+                "options": {"use_cache": False},
             },
-            timeout=60
+            timeout=60,
         )
 
         content_type = response.headers["content-type"]
@@ -424,19 +512,22 @@ class InferenceManager:
             outputs = return_data[0]["generated_text"]
             outputs = outputs.removeprefix(inference_request.prompt)
 
-            self.announcer.announce(InferenceResult(
-                uuid=inference_request.uuid,
-                model_name=inference_request.model_name,
-                model_tag=inference_request.model_tag,
-                model_provider=inference_request.model_provider,
-                token=outputs,
-                probability=None,
-                top_n_distribution=None
-            ), event="infer")
+            self.announcer.announce(
+                InferenceResult(
+                    uuid=inference_request.uuid,
+                    model_name=inference_request.model_name,
+                    model_tag=inference_request.model_tag,
+                    model_provider=inference_request.model_provider,
+                    token=outputs,
+                    probability=None,
+                    top_n_distribution=None,
+                ),
+                event="infer",
+            )
         else:
             total_tokens = 0
             for response in response.iter_lines():
-                response = response.decode('utf-8')
+                response = response.decode("utf-8")
                 if response == "":
                     continue
 
@@ -445,14 +536,15 @@ class InferenceManager:
                     error = response_json["error"]
                     raise Exception(f"{error}")
 
-                token = response_json['token']
+                token = response_json["token"]
 
                 total_tokens += 1
 
                 if token["special"]:
                     continue
 
-                if cancelled: continue
+                if cancelled:
+                    continue
 
                 if not self.announcer.announce(
                     InferenceResult(
@@ -460,40 +552,56 @@ class InferenceManager:
                         model_name=inference_request.model_name,
                         model_tag=inference_request.model_tag,
                         model_provider=inference_request.model_provider,
-                        token=" " if token['id'] == 3 else token['text'],
-                        probability=token['logprob'],
+                        token=" " if token["id"] == 3 else token["text"],
+                        probability=token["logprob"],
                         top_n_distribution=None,
                     ),
                     event="infer",
                 ):
                     cancelled = True
-                    logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
+                    logger.info(
+                        f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}"
+                    )
 
-    def huggingface_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        self.__error_handler__(self.__huggingface_text_generation__, provider_details, inference_request)
+    def huggingface_text_generation(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
+        self.__error_handler__(
+            self.__huggingface_text_generation__, provider_details, inference_request
+        )
 
-    def __forefront_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
+    def __forefront_text_generation__(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
         with requests.post(
-                f"https://shared-api.forefront.link/organization/gPn2ZLSO3mTh/{inference_request.model_name}/completions/{provider_details.version_key}",
-                headers={
-                    "Authorization": f"Bearer {provider_details.api_key}",
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps({
+            f"https://shared-api.forefront.link/organization/gPn2ZLSO3mTh/{inference_request.model_name}/completions/{provider_details.version_key}",
+            headers={
+                "Authorization": f"Bearer {provider_details.api_key}",
+                "Content-Type": "application/json",
+            },
+            data=json.dumps(
+                {
                     "text": inference_request.prompt,
-                    "top_p": float(inference_request.model_parameters['topP']),
-                    "top_k": int(inference_request.model_parameters['topK']),
-                    "temperature":  float(inference_request.model_parameters['temperature']),
-                    "repetition_penalty":  float(inference_request.model_parameters['repetitionPenalty']),
-                    "length": int(inference_request.model_parameters['maximumLength']),
-                    "stop": inference_request.model_parameters['stopSequences'],
+                    "top_p": float(inference_request.model_parameters["topP"]),
+                    "top_k": int(inference_request.model_parameters["topK"]),
+                    "temperature": float(
+                        inference_request.model_parameters["temperature"]
+                    ),
+                    "repetition_penalty": float(
+                        inference_request.model_parameters["repetitionPenalty"]
+                    ),
+                    "length": int(inference_request.model_parameters["maximumLength"]),
+                    "stop": inference_request.model_parameters["stopSequences"],
                     "logprobs": 5,
                     "stream": True,
-                }),
-                stream=True
-            ) as response:
+                }
+            ),
+            stream=True,
+        ) as response:
             if response.status_code != 200:
-                raise Exception(f"Request failed: {response.status_code} {response.reason}")
+                raise Exception(
+                    f"Request failed: {response.status_code} {response.reason}"
+                )
             cancelled = False
             total_tokens = 0
             aggregate_string_length = 0
@@ -508,17 +616,22 @@ class InferenceManager:
                     generated_token = packet.data[aggregate_string_length:]
                     aggregate_string_length = len(packet.data)
 
-                    if not self.announcer.announce(InferenceResult(
-                        uuid=inference_request.uuid,
-                        model_name=inference_request.model_name,
-                        model_tag=inference_request.model_tag,
-                        model_provider=inference_request.model_provider,
-                        token=generated_token,
-                        probability=probability,
-                        top_n_distribution=prob_dist
-                    ), event="infer"):
+                    if not self.announcer.announce(
+                        InferenceResult(
+                            uuid=inference_request.uuid,
+                            model_name=inference_request.model_name,
+                            model_tag=inference_request.model_tag,
+                            model_provider=inference_request.model_provider,
+                            token=generated_token,
+                            probability=probability,
+                            top_n_distribution=prob_dist,
+                        ),
+                        event="infer",
+                    ):
                         cancelled = True
-                        logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
+                        logger.info(
+                            f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}"
+                        )
                 elif packet.event == "message":
                     data = json.loads(packet.data)
 
@@ -536,11 +649,14 @@ class InferenceManager:
 
                         chosen_log_prob = 0
                         prob_dist = ProablityDistribution(
-                            log_prob_sum=0, simple_prob_sum=0, tokens={},
+                            log_prob_sum=0,
+                            simple_prob_sum=0,
+                            tokens={},
                         )
 
                         for token, log_prob in top_logprobs.items():
-                            if log_prob == -3000.0: continue
+                            if log_prob == -3000.0:
+                                continue
                             simple_prob = round(math.exp(log_prob) * 100, 2)
                             prob_dist.tokens[token] = [log_prob, simple_prob]
 
@@ -550,22 +666,31 @@ class InferenceManager:
                             prob_dist.simple_prob_sum += simple_prob
 
                         prob_dist.tokens = dict(
-                            sorted(prob_dist.tokens.items(), key=lambda item: item[1][0], reverse=True)
+                            sorted(
+                                prob_dist.tokens.items(),
+                                key=lambda item: item[1][0],
+                                reverse=True,
+                            )
                         )
                         prob_dist.log_prob_sum = chosen_log_prob
                         prob_dist.simple_prob_sum = round(prob_dist.simple_prob_sum, 2)
 
-                        if not self.announcer.announce(InferenceResult(
-                            uuid=inference_request.uuid,
-                            model_name=inference_request.model_name,
-                            model_tag=inference_request.model_tag,
-                            model_provider=inference_request.model_provider,
-                            token=generated_token,
-                            probability=probability,
-                            top_n_distribution=prob_dist
-                        ), event="infer"):
+                        if not self.announcer.announce(
+                            InferenceResult(
+                                uuid=inference_request.uuid,
+                                model_name=inference_request.model_name,
+                                model_tag=inference_request.model_tag,
+                                model_provider=inference_request.model_provider,
+                                token=generated_token,
+                                probability=probability,
+                                top_n_distribution=prob_dist,
+                            ),
+                            event="infer",
+                        ):
                             cancelled = True
-                            logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
+                            logger.info(
+                                f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}"
+                            )
 
                     total_tokens = len(tokens)
                 elif packet.event == "end":
@@ -573,29 +698,41 @@ class InferenceManager:
                 else:
                     continue
 
-                if cancelled: continue
+                if cancelled:
+                    continue
 
-    def forefront_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        self.__error_handler__(self.__forefront_text_generation__, provider_details, inference_request)
+    def forefront_text_generation(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
+        self.__error_handler__(
+            self.__forefront_text_generation__, provider_details, inference_request
+        )
 
-    def __local_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
+    def __local_text_generation__(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
         cancelled = False
-        logger.info(f"Starting inference for {inference_request.uuid} - {inference_request.model_name}")
+        logger.info(
+            f"Starting inference for {inference_request.uuid} - {inference_request.model_name}"
+        )
 
         hf = HFInference(inference_request.model_name)
         output = hf.generate(
             prompt=inference_request.prompt,
-            max_length=int(inference_request.model_parameters['maximumLength']),
-            top_p=float(inference_request.model_parameters['topP']),
-            top_k=int(inference_request.model_parameters['topK']),
-            temperature=float(inference_request.model_parameters['temperature']),
-            repetition_penalty=float(inference_request.model_parameters['repetitionPenalty']),
+            max_length=int(inference_request.model_parameters["maximumLength"]),
+            top_p=float(inference_request.model_parameters["topP"]),
+            top_k=int(inference_request.model_parameters["topK"]),
+            temperature=float(inference_request.model_parameters["temperature"]),
+            repetition_penalty=float(
+                inference_request.model_parameters["repetitionPenalty"]
+            ),
             stop_sequences=None,
         )
 
         infer_response = None
         for generated_token in output:
-            if cancelled: break
+            if cancelled:
+                break
             infer_response = InferenceResult(
                 uuid=inference_request.uuid,
                 model_name=inference_request.model_name,
@@ -603,25 +740,33 @@ class InferenceManager:
                 model_provider=inference_request.model_provider,
                 token=generated_token,
                 probability=None,
-                top_n_distribution=None
+                top_n_distribution=None,
             )
 
             if not self.announcer.announce(infer_response, event="infer"):
                 cancelled = True
-                logger.info(f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}")
+                logger.info(
+                    f"Cancelled inference for {inference_request.uuid} - {inference_request.model_name}"
+                )
 
-    def local_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-       self.__error_handler__(self.__local_text_generation__, provider_details, inference_request)
+    def local_text_generation(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
+        self.__error_handler__(
+            self.__local_text_generation__, provider_details, inference_request
+        )
 
-    def __anthropic_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        
+    def __anthropic_text_generation__(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
+
         c = anthropic.Client(api_key=provider_details.api_key)
 
         claude3 = re.search("claude-3", inference_request.model_name)
 
         current_date = datetime.now().strftime("%Y-%m-%d")
 
-        SYSTEM_PROMPT = '''
+        SYSTEM_PROMPT = """
         You are Claude, trained by Anthropic.
 
         When writing code, you should write high-quality code
@@ -635,84 +780,105 @@ class InferenceManager:
         Answer as concisely as possible.
 
         The current date is {current_date}
-        '''
+        """
 
-        logger.info('print output here for anthropic')
+        logger.info("print output here for anthropic")
 
-        response = ''
+        response = ""
         if claude3:
 
             with c.messages.stream(
-                max_tokens=inference_request.model_parameters['maximumLength'],
+                max_tokens=inference_request.model_parameters["maximumLength"],
                 system=SYSTEM_PROMPT,
-                temperature=float(inference_request.model_parameters['temperature']),
-                messages=[{
-                    "role": "user", 
-                    "content": f"{inference_request.prompt}"
-                }],
+                temperature=float(inference_request.model_parameters["temperature"]),
+                messages=[{"role": "user", "content": f"{inference_request.prompt}"}],
                 model=inference_request.model_name,
             ) as stream:
                 for text in stream.text_stream:
-                    self.announcer.announce(InferenceResult(
-                        uuid=None,
-                        model_name=inference_request.model_name,
-                        model_tag=inference_request.model_tag,
-                        model_provider=inference_request.model_provider,
-                        token=text,
-                        probability=None,
-                        top_n_distribution=None
-                    ), event="infer")
+                    self.announcer.announce(
+                        InferenceResult(
+                            uuid=None,
+                            model_name=inference_request.model_name,
+                            model_tag=inference_request.model_tag,
+                            model_provider=inference_request.model_provider,
+                            token=text,
+                            probability=None,
+                            top_n_distribution=None,
+                        ),
+                        event="infer",
+                    )
         else:
             response = c.completions.create(
                 prompt=f"{SYSTEM_PROMPT} \n\n{anthropic.HUMAN_PROMPT} {inference_request.prompt} {anthropic.AI_PROMPT}",
-                stop_sequences=[anthropic.HUMAN_PROMPT] + inference_request.model_parameters['stopSequences'],
-                temperature=float(inference_request.model_parameters['temperature']),
-                top_p=float(inference_request.model_parameters['topP']),
-                max_tokens_to_sample=inference_request.model_parameters['maximumLength'],
+                stop_sequences=[anthropic.HUMAN_PROMPT]
+                + inference_request.model_parameters["stopSequences"],
+                temperature=float(inference_request.model_parameters["temperature"]),
+                top_p=float(inference_request.model_parameters["topP"]),
+                max_tokens_to_sample=inference_request.model_parameters[
+                    "maximumLength"
+                ],
                 model=inference_request.model_name,
                 stream=True,
             )
             for data in response:
-                self.announcer.announce(InferenceResult(
-                    uuid=data.id,
-                    model_name=data.model,
-                    model_tag=inference_request.model_tag,
-                    model_provider=inference_request.model_provider,
-                    token=data.completion,
-                    probability=None,
-                    top_n_distribution=None
-                ), event="infer")
+                self.announcer.announce(
+                    InferenceResult(
+                        uuid=data.id,
+                        model_name=data.model,
+                        model_tag=inference_request.model_tag,
+                        model_provider=inference_request.model_provider,
+                        token=data.completion,
+                        probability=None,
+                        top_n_distribution=None,
+                    ),
+                    event="infer",
+                )
 
-    def anthropic_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        self.__error_handler__(self.__anthropic_text_generation__, provider_details, inference_request)
+    def anthropic_text_generation(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
+        self.__error_handler__(
+            self.__anthropic_text_generation__, provider_details, inference_request
+        )
 
-    def __aleph_alpha_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
+    def __aleph_alpha_text_generation__(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
         client = aleph_client(provider_details.api_key)
 
         request = CompletionRequest(
-            prompt = Prompt.from_text(inference_request.prompt),
-            temperature= inference_request.model_parameters['temperature'],
-            maximum_tokens=inference_request.model_parameters['maximumLength'],
-            top_p=float(inference_request.model_parameters['topP']),
-            top_k=int(inference_request.model_parameters['topK']),
-            presence_penalty=float(inference_request.model_parameters['repetitionPenalty']),
-            stop_sequences=inference_request.model_parameters['stopSequences']
+            prompt=Prompt.from_text(inference_request.prompt),
+            temperature=inference_request.model_parameters["temperature"],
+            maximum_tokens=inference_request.model_parameters["maximumLength"],
+            top_p=float(inference_request.model_parameters["topP"]),
+            top_k=int(inference_request.model_parameters["topK"]),
+            presence_penalty=float(
+                inference_request.model_parameters["repetitionPenalty"]
+            ),
+            stop_sequences=inference_request.model_parameters["stopSequences"],
         )
 
         response = client.complete(request, model=inference_request.model_name)
 
-        self.announcer.announce(InferenceResult(
-            uuid=inference_request.uuid,
-            model_name=inference_request.model_name,
-            model_tag=inference_request.model_tag,
-            model_provider=inference_request.model_provider,
-            token=response.completions[0].completion,
-            probability=None,
-            top_n_distribution=None
-        ), event="infer")
+        self.announcer.announce(
+            InferenceResult(
+                uuid=inference_request.uuid,
+                model_name=inference_request.model_name,
+                model_tag=inference_request.model_tag,
+                model_provider=inference_request.model_provider,
+                token=response.completions[0].completion,
+                probability=None,
+                top_n_distribution=None,
+            ),
+            event="infer",
+        )
 
-    def aleph_alpha_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
-        self.__error_handler__(self.__aleph_alpha_text_generation__, provider_details, inference_request)
+    def aleph_alpha_text_generation(
+        self, provider_details: ProviderDetails, inference_request: InferenceRequest
+    ):
+        self.__error_handler__(
+            self.__aleph_alpha_text_generation__, provider_details, inference_request
+        )
 
     def get_announcer(self):
         return self.announcer

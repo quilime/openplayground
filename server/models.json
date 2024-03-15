@@ -281,7 +281,7 @@
             "range": []
           }
         }
-      },      
+      },
       "gpt-4-1106-preview": {
         "enabled": false,
         "status": "ready",
@@ -343,7 +343,7 @@
             "range": []
           }
         }
-      }      
+      }
     }
   },
   "cohere": {
@@ -625,7 +625,7 @@
             "range": []
           }
         }
-      }      
+      }
     }
   },
   "aleph-alpha": {
