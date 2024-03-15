@@ -92,7 +92,8 @@ const saveSettings = () => {
   let SETTINGS_SIZE = _settings.length * 2 / 1024 / 1024;
 
   if (SETTINGS_SIZE >= 5) {
-    const shouldDownloadHistory = confirm("Local Storage is full. Do you wish to download your history prior to clearing storage?");
+    // const shouldDownloadHistory = confirm("Local Storage is full. Do you wish to download your history prior to clearing storage?");
+    const shouldDownloadHistory = false;
 
     const first_entry = SETTINGS.pages["playground"].history.entries.shift()
 

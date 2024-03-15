@@ -17,7 +17,7 @@ install-backend:
 	cd server && pip install -r requirements.txt
 
 backend:
-	python -m server.app --port 5555
+	python -m server.app --port 5555 --debug
 
 backend-dev:
 	nodemon -e py --exec $(MAKE) backend

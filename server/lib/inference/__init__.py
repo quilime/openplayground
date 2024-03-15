@@ -3,6 +3,7 @@ import cachetools
 import math
 import openai
 import os
+import re
 import json
 import requests
 import sseclient
@@ -613,7 +614,10 @@ class InferenceManager:
        self.__error_handler__(self.__local_text_generation__, provider_details, inference_request)
 
     def __anthropic_text_generation__(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
+        
         c = anthropic.Client(api_key=provider_details.api_key)
+
+        claude3 = re.search("claude-3", inference_request.model_name)
 
         current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -633,29 +637,51 @@ class InferenceManager:
         The current date is {current_date}
         '''
 
-        response = c.completions.create(
-            prompt=f"{SYSTEM_PROMPT} \n\n{anthropic.HUMAN_PROMPT} {inference_request.prompt} {anthropic.AI_PROMPT}",
-            stop_sequences=[anthropic.HUMAN_PROMPT] + inference_request.model_parameters['stopSequences'],
-            temperature=float(inference_request.model_parameters['temperature']),
-            top_p=float(inference_request.model_parameters['topP']),
-            max_tokens_to_sample=inference_request.model_parameters['maximumLength'],
-            model=inference_request.model_name,
-            stream=True,
-        )
+        logger.info('print output here for anthropic')
 
-        completion = ""
-        cancelled = False
+        response = ''
+        if claude3:
 
-        for data in response:
-            self.announcer.announce(InferenceResult(
-                uuid=data.id,
-                model_name=data.model,
-                model_tag=inference_request.model_tag,
-                model_provider=inference_request.model_provider,
-                token=data.completion,
-                probability=None,
-                top_n_distribution=None
-            ), event="infer")
+            with c.messages.stream(
+                max_tokens=inference_request.model_parameters['maximumLength'],
+                system=SYSTEM_PROMPT,
+                temperature=float(inference_request.model_parameters['temperature']),
+                messages=[{
+                    "role": "user", 
+                    "content": f"{inference_request.prompt}"
+                }],
+                model=inference_request.model_name,
+            ) as stream:
+                for text in stream.text_stream:
+                    self.announcer.announce(InferenceResult(
+                        uuid=None,
+                        model_name=inference_request.model_name,
+                        model_tag=inference_request.model_tag,
+                        model_provider=inference_request.model_provider,
+                        token=text,
+                        probability=None,
+                        top_n_distribution=None
+                    ), event="infer")
+        else:
+            response = c.completions.create(
+                prompt=f"{SYSTEM_PROMPT} \n\n{anthropic.HUMAN_PROMPT} {inference_request.prompt} {anthropic.AI_PROMPT}",
+                stop_sequences=[anthropic.HUMAN_PROMPT] + inference_request.model_parameters['stopSequences'],
+                temperature=float(inference_request.model_parameters['temperature']),
+                top_p=float(inference_request.model_parameters['topP']),
+                max_tokens_to_sample=inference_request.model_parameters['maximumLength'],
+                model=inference_request.model_name,
+                stream=True,
+            )
+            for data in response:
+                self.announcer.announce(InferenceResult(
+                    uuid=data.id,
+                    model_name=data.model,
+                    model_tag=inference_request.model_tag,
+                    model_provider=inference_request.model_provider,
+                    token=data.completion,
+                    probability=None,
+                    top_n_distribution=None
+                ), event="infer")
 
     def anthropic_text_generation(self, provider_details: ProviderDetails, inference_request: InferenceRequest):
         self.__error_handler__(self.__anthropic_text_generation__, provider_details, inference_request)
