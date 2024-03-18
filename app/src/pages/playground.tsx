@@ -648,7 +648,7 @@ const PromptCompletionEditor = ({ showDialog }) => {
     )
   )
 
-  const [systemPrompt, setSystemPrompt] = React.useState('Current Date: ' + new Date().toLocaleDateString());
+  const [systemPrompt, setSystemPrompt] = React.useState('');
 
   const editorStateRef = useRef<EditorState>(editorState)
 
